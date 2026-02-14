@@ -7,7 +7,9 @@ import IPP from '../assets/sandhya.jpg';
 import vicepresident from '../assets/pratikdhakal.jpg';
 import shreeya from '../assets/shreeya.jpg';
 import shrijan from '../assets/shrijan.png';
-import Teasurer from '../assets/shristi.jpg';
+import Teasurer from "../assets/rajani-sharma.jpg";
+import jointSecretary from "../assets/prasis.jpg";
+import shristi from "../assets/shristi.jpeg";
 
 
 
@@ -42,10 +44,10 @@ const TeamSection = () => {
     {
       name: "LEO Prsis Adhikari",
       role: "joint Secretary",
-      image: Secretary,
+      image: jointSecretary,
     },
     {
-      name: "LEO Shristi Ranabhat",
+      name: "LEO Rajani Sharma",
       role: "Teasurer",
       image: Teasurer,
     },
@@ -60,10 +62,11 @@ const TeamSection = () => {
       image: shrijan,
     },
     {
-      name: "LEO Shreeya Acharya",
+      name :"LEO Shristi Ranabhat",
       role: "Member",
-      image: shreeya,
+      image: shristi,
     },
+    
   ];
 
   return (

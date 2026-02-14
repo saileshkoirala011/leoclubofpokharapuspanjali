@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
  // adjust based on your deploy path
+  base: "/leoclubofpokharapuspanjali/",
   plugins: [
     react(),
     tailwindcss()

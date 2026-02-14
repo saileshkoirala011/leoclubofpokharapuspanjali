@@ -1,26 +1,29 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Team from "../Components/Teams.jsx"
-import President from '../assets/Sailesh.jpg';
+import President from '../assets/Smitri-Karki.jpg';
+import VicePresident from '../assets/pratikdhakal.jpg';
+import Secretary from '../assets/Sailesh.jpg';
 
 const TeamSection = () => {
   const navigate = useNavigate();
 
   const team = [
     {
-      name: "LEO Sailesh Koirala",
+      name: "LEO Smiriti Karkai",
       role: "President",
       image: President,
     },
     {
-      name: "LEO",
+      name: "LEO Pratik Dhakal",
       role: "Vice-President",
-      image: "/images/sadhana.jpg",
+      image: VicePresident,
     },
     {
-      name: "LEO",
-      role: "Member ",
-      image: "/images/secretary.jpg",
+      name: "LEO Sailesh Koirala",
+      role: "Secretary",
+      image: Secretary,
+
     },
   ];
 
