@@ -1,17 +1,12 @@
 import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/
 export default defineConfig({
+ // adjust based on your deploy path
   plugins: [
-    react({
-      babel: {
-        plugins: [['babel-plugin-react-compiler']],
-        base:"/leoclub"
-      },
-    }),
-    tailwindcss(),
+    react(),
+    tailwindcss()
   ],
   resolve: {
     alias: {
@@ -28,12 +23,19 @@ export default defineConfig({
       },
     },
   },
-  optimizeDeps: {
-    rolldownOptions: {
+  build: {
+    rollupOptions: {
       output: {
-        format: 'es'
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('react')) return 'react-vendor'
+            if (id.includes('react-router')) return 'react-router-vendor'
+            if (id.includes('react-icons')) return 'icons-vendor'
+            return 'vendor'
+          }
+        }
       }
-    }
+    },
+    chunkSizeWarningLimit: 600,
   },
-
 })
