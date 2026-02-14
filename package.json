@@ -13,6 +13,9 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "tailwindcss": "^3.x.x",
+    "postcss": "^8.x.x",
+    "autoprefixer": "^10.x.x",
     "@tailwindcss/vite": "^4.1.18",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
