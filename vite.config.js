@@ -8,7 +8,7 @@ export default defineConfig({
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],
-        
+        base:"/leoclub"
       },
     }),
     tailwindcss(),
@@ -29,11 +29,11 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-  rolldownOptions: {
-    output: {
-      format: 'es'
+    rolldownOptions: {
+      output: {
+        format: 'es'
+      }
     }
-  }
-},
+  },
 
 })
