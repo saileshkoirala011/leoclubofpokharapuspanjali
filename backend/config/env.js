@@ -16,6 +16,8 @@ export const config = {
   JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key',
   COOKIE_MAX_AGE: process.env.COOKIE_MAX_AGE || 7 * 24 * 60 * 60 * 1000, // 7 days
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
+  REDIS_URL: process.env.REDIS_URL || '',
+  OAUTH_GOOGLE_CLIENT_ID: process.env.OAUTH_GOOGLE_CLIENT_ID || '',
 };
 
 export default config;

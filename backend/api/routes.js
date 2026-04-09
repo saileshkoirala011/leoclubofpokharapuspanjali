@@ -1,5 +1,4 @@
 import express from 'express';
-import { config } from '../config/env.js';
 import {
   createContact,
   getAllContacts,
@@ -28,6 +27,9 @@ import {
   updateAbout,
   deleteAbout,
 } from './aboutController.js';
+import { login, logout, register } from './authController.js';
+import { getUserAnalytics, getUsers, opsetUser } from './userController.js';
+import { authenticate, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -51,41 +53,14 @@ router.get('/data', (req, res) => {
 });
 
 // Authentication routes
-router.post('/login', (req, res) => {
-  const { username, password } = req.body;
+router.post('/auth/register', register);
+router.post('/auth/login', login);
+router.post('/auth/logout', logout);
 
-  // Mock authentication
-  if (username && password) {
-    const token = 'mock-jwt-token-' + Date.now();
-    
-    // Set cookie with token
-    res.cookie('authToken', token, {
-      httpOnly: true,
-      secure: config.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-
-    res.status(200).json({
-      success: true,
-      message: 'Login successful',
-      token,
-    });
-  } else {
-    res.status(400).json({
-      success: false,
-      message: 'Username and password are required',
-    });
-  }
-});
-
-router.post('/logout', (req, res) => {
-  res.clearCookie('authToken');
-  res.status(200).json({
-    success: true,
-    message: 'Logged out successfully',
-  });
-});
+// User routes
+router.get('/users', authenticate, authorize('admin'), getUsers);
+router.post('/users/opset', authenticate, authorize('admin'), opsetUser);
+router.get('/users/analytics', authenticate, authorize('admin'), getUserAnalytics);
 
 // Contact routes
 router.post('/contacts', createContact);
