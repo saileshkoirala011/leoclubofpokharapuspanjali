@@ -8,6 +8,7 @@ import Ourteam from "./Page/Team";
 import Leader from "./Page/Leader";
 import Footer from "./Page/Footer";
 import { Routes, Route } from "react-router-dom";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Normal imports for route components
 import Team from "./Components/Teams";
@@ -42,6 +43,7 @@ function App() {
        
         {/* Add other routes as needed */}
       </Routes>
+      <SpeedInsights />
     </div>
   );
 }
