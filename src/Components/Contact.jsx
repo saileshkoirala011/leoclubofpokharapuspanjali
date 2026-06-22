@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Footer from "../Page/Footer";
+import { api } from "../services/api";
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -29,32 +30,7 @@ const Contact = () => {
         setFieldErrors({});
 
         try {
-            const response = await fetch("/api/contacts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                // Handle validation errors with field-specific messages
-                if (data.errors && Array.isArray(data.errors)) {
-                    const fieldErrorMap = {};
-                    data.errors.forEach(err => {
-                        if (err.field) {
-                            fieldErrorMap[err.field] = err.message;
-                        }
-                    });
-                    setFieldErrors(fieldErrorMap);
-                }
-                
-                const errorMsg = data.message || `HTTP error! status: ${response.status}`;
-                throw new Error(errorMsg);
-            }
+            const data = await api.contact.create(formData);
 
             if (data.success) {
                 setSubmitted(true);
@@ -65,7 +41,18 @@ const Contact = () => {
                 setError(data.message || "Failed to submit form");
             }
         } catch (err) {
-            setError(err.message);
+            // Handle validation errors with field-specific messages
+            if (err.errors && Array.isArray(err.errors)) {
+                const fieldErrorMap = {};
+                err.errors.forEach(fieldErr => {
+                    if (fieldErr.field) {
+                        fieldErrorMap[fieldErr.field] = fieldErr.message;
+                    }
+                });
+                setFieldErrors(fieldErrorMap);
+            }
+            
+            setError(err.message || "Failed to submit form");
             console.error("Submission error:", err);
         } finally {
             setLoading(false);
