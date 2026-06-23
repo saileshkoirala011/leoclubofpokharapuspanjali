@@ -10,7 +10,6 @@ console.log('Starting backend server...');
 
 const app = express();
 
-// Middleware
 app.use(cors({
   origin: config.FRONTEND_URL,
   credentials: true,
@@ -19,24 +18,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Connect to Database
-connectDB().then(() => {
-  console.log('✓ Database connected successfully');
+connectDB().then((conn) => {
+  if (conn) console.log('✓ Database connected successfully');
 }).catch((err) => {
   console.error('✗ Database connection failed:', err.message);
 });
 
-// Routes - mount all API routes under /api
 app.use('/api', routes);
-
-// Error Handling Middleware
 app.use(errorHandler);
 
-// Start Server
 const PORT = config.PORT;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Environment: ${config.NODE_ENV}`);
+  console.log(`✓ Server running on port ${PORT}`);
+  console.log(`✓ Environment: ${config.NODE_ENV}`);
+  console.log(`✓ Frontend URL: ${config.FRONTEND_URL}`);
 });
 
 export default app;
