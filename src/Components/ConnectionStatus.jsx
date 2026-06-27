@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { api } from "../services/api";
 
 /**
  * ConnectionStatus Component
@@ -16,9 +15,20 @@ export const ConnectionStatus = () => {
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        // Check backend health
-        const healthResponse = await api.health.check();
-        
+        const response = await fetch("/api/health");
+        let healthResponse;
+        try {
+          healthResponse = await response.json();
+        } catch (parseError) {
+          console.error("Failed to parse health check response:", parseError);
+          setStatus((prev) => ({
+            ...prev,
+            backend: "error",
+            database: "error",
+          }));
+          return;
+        }
+
         setStatus((prev) => ({
           ...prev,
           backend: healthResponse.success ? "connected" : "error",
@@ -35,7 +45,6 @@ export const ConnectionStatus = () => {
     };
 
     checkConnection();
-    // Check every 10 seconds
     const interval = setInterval(checkConnection, 10000);
     return () => clearInterval(interval);
   }, []);

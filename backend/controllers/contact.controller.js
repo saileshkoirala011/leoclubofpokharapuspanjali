@@ -1,6 +1,9 @@
+import mongoose from 'mongoose';
 import Contact from '../models/contact.js';
 
-export const createContact = async (req, res) => {
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+
+export const createContact = async (req, res, next) => {
   try {
     const { name, email, subject, message } = req.body;
 
@@ -30,31 +33,40 @@ export const createContact = async (req, res) => {
       const errors = Object.values(error.errors).map(e => e.message);
       return res.status(400).json({ success: false, message: errors.join(', ') });
     }
-    res.status(500).json({ success: false, message: 'Error saving message', error: error.message });
+    console.error('createContact error:', error);
+    next(error);
   }
 };
 
-export const getAllContacts = async (req, res) => {
+export const getAllContacts = async (req, res, next) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json({ success: true, count: contacts.length, data: contacts });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching contacts', error: error.message });
+    console.error('getAllContacts error:', error);
+    next(error);
   }
 };
 
-export const getContactById = async (req, res) => {
+export const getContactById = async (req, res, next) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid contact ID format' });
+    }
     const contact = await Contact.findById(req.params.id);
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
     res.status(200).json({ success: true, data: contact });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching contact', error: error.message });
+    console.error('getContactById error:', error);
+    next(error);
   }
 };
 
-export const updateContactStatus = async (req, res) => {
+export const updateContactStatus = async (req, res, next) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid contact ID format' });
+    }
     const { status } = req.body;
     if (!['new', 'read', 'replied'].includes(status)) {
       return res.status(400).json({ success: false, message: 'Invalid status' });
@@ -63,16 +75,21 @@ export const updateContactStatus = async (req, res) => {
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
     res.status(200).json({ success: true, message: 'Status updated', data: contact });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error updating contact', error: error.message });
+    console.error('updateContactStatus error:', error);
+    next(error);
   }
 };
 
-export const deleteContact = async (req, res) => {
+export const deleteContact = async (req, res, next) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid contact ID format' });
+    }
     const contact = await Contact.findByIdAndDelete(req.params.id);
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
     res.status(200).json({ success: true, message: 'Contact deleted' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error deleting contact', error: error.message });
+    console.error('deleteContact error:', error);
+    next(error);
   }
 };
