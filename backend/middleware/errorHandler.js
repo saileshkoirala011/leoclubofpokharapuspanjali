@@ -1,4 +1,5 @@
 export const errorHandler = (err, req, res, _next) => {
+<<<<<<< HEAD
   console.error('Error:', { message: err.message, name: err.name, stack: err.stack });
 
   let statusCode = err.statusCode || 500;
@@ -19,15 +20,15 @@ export const errorHandler = (err, req, res, _next) => {
     const field = Object.keys(err.keyValue).join(', ');
     message = `Duplicate value for: ${field}`;
   }
+=======
+  console.error('Error:', err.message);
+
+  const statusCode = err.statusCode || 500;
+>>>>>>> origin/devin/1782546719-security-fixes
 
   res.status(statusCode).json({
     success: false,
-    message,
-    error: process.env.NODE_ENV === 'development' ? {
-      name: err.name,
-      message: err.message,
-      stack: err.stack,
-    } : {},
+    message: statusCode === 500 ? 'Internal Server Error' : err.message,
   });
 };
 

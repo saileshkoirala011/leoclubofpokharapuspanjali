@@ -4,20 +4,22 @@ import React, { useState, useEffect } from "react";
 
 /**
  * ConnectionStatus Component
- * Debug component to verify backend-frontend connection
- * Remove from production
+ * Debug component to verify backend-frontend connection.
+ * Only renders in development mode (import.meta.env.DEV).
  */
 export const ConnectionStatus = () => {
   const [status, setStatus] = useState({
     backend: "checking",
     database: "checking",
-    apiUrl: "/api",
   });
 
   useEffect(() => {
+    if (!import.meta.env.DEV) return;
+
     const checkConnection = async () => {
       try {
         const response = await fetch("/api/health");
+<<<<<<< HEAD
         let healthResponse;
         try {
           healthResponse = await response.json();
@@ -43,6 +45,15 @@ export const ConnectionStatus = () => {
           database: "disconnected",
         }));
         console.error("Connection check failed:", error);
+=======
+        const data = await response.json();
+        setStatus({
+          backend: data.success ? "connected" : "error",
+          database: data.success ? "connected" : "error",
+        });
+      } catch {
+        setStatus({ backend: "disconnected", database: "disconnected" });
+>>>>>>> origin/devin/1782546719-security-fixes
       }
     };
 
@@ -50,6 +61,9 @@ export const ConnectionStatus = () => {
     const interval = setInterval(checkConnection, 10000);
     return () => clearInterval(interval);
   }, []);
+
+  // Only render in development
+  if (!import.meta.env.DEV) return null;
 
   const getStatusColor = (statusValue) => {
     switch (statusValue) {
@@ -67,8 +81,8 @@ export const ConnectionStatus = () => {
 
   return (
     <div className="fixed bottom-4 right-4 p-4 bg-white rounded-lg shadow-lg border border-gray-200 text-sm z-50 max-w-xs">
-      <h3 className="font-semibold text-gray-900 mb-3">Connection Status</h3>
-      
+      <h3 className="font-semibold text-gray-900 mb-3">Connection Status (Dev)</h3>
+
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="text-gray-700">Backend:</span>
@@ -76,20 +90,12 @@ export const ConnectionStatus = () => {
             {status.backend}
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between">
           <span className="text-gray-700">Database:</span>
           <span className={`px-2 py-1 rounded ${getStatusColor(status.database)}`}>
             {status.database}
           </span>
-        </div>
-
-        <div className="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-500">
-          API Base: {status.apiUrl}
-        </div>
-
-        <div className="text-xs text-gray-500 mt-2">
-          Updating every 10s...
         </div>
       </div>
     </div>

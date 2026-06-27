@@ -10,9 +10,14 @@ export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().select('-password').sort({ createdAt: -1 });
     res.status(200).json({ success: true, count: users.length, data: users });
+<<<<<<< HEAD
   } catch (error) {
     console.error('getAllUsers error:', error);
     next(error);
+=======
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error fetching users' });
+>>>>>>> origin/devin/1782546719-security-fixes
   }
 };
 
@@ -24,14 +29,20 @@ export const getUserById = async (req, res, next) => {
     const user = await User.findById(req.params.id).select('-password');
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
     res.status(200).json({ success: true, data: user });
+<<<<<<< HEAD
   } catch (error) {
     console.error('getUserById error:', error);
     next(error);
+=======
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error fetching user' });
+>>>>>>> origin/devin/1782546719-security-fixes
   }
 };
 
 export const updateUser = async (req, res, next) => {
   try {
+<<<<<<< HEAD
     if (!isValidObjectId(req.params.id)) {
       return res.status(400).json({ success: false, message: 'Invalid user ID format' });
     }
@@ -47,6 +58,18 @@ export const updateUser = async (req, res, next) => {
     }
     console.error('updateUser error:', error);
     next(error);
+=======
+    const { name, email } = req.body;
+    const updates = {};
+    if (name) updates.name = name;
+    if (email) updates.email = email;
+    // password and role changes are not allowed through this endpoint
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select('-password');
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+    res.status(200).json({ success: true, message: 'User updated', data: user });
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error updating user' });
+>>>>>>> origin/devin/1782546719-security-fixes
   }
 };
 
@@ -58,9 +81,14 @@ export const deleteUser = async (req, res, next) => {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
     res.status(200).json({ success: true, message: 'User deleted' });
+<<<<<<< HEAD
   } catch (error) {
     console.error('deleteUser error:', error);
     next(error);
+=======
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error deleting user' });
+>>>>>>> origin/devin/1782546719-security-fixes
   }
 };
 =======
