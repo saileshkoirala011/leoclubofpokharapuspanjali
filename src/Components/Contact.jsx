@@ -42,22 +42,26 @@ const Contact = () => {
     setFieldErrors({});
 
     try {
-      // BUG FIX: `api` was never imported/defined — replaced with a standard fetch call.
-      // Adjust the URL to match your actual backend endpoint.
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/contacts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse response:", parseError);
+        setStatus({ type: "error", message: `Server error (${response.status}). Please try again later.` });
+        return;
+      }
 
       if (response.ok && data.success) {
         setStatus({ type: "success", message: "Your message has been sent successfully! We'll get back to you soon." });
         setFormData({ name: "", email: "", subject: "", message: "" });
         setTimeout(() => setStatus({ type: null, message: "" }), 5000);
       } else {
-        // Server returned an error body
         if (data.errors && Array.isArray(data.errors)) {
           const fieldErrorMap = {};
           data.errors.forEach((fieldErr) => {
@@ -68,9 +72,8 @@ const Contact = () => {
         setStatus({ type: "error", message: data.message || "Failed to submit form. Please try again." });
       }
     } catch (err) {
-      // Network / parse errors
-      setStatus({ type: "error", message: "Something went wrong. Please check your connection and try again." });
       console.error("Submission error:", err);
+      setStatus({ type: "error", message: "Something went wrong. Please check your connection and try again." });
     } finally {
       setLoading(false);
     }

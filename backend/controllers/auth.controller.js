@@ -1,6 +1,6 @@
 import { config } from '../config/env.js';
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
@@ -22,7 +22,8 @@ export const login = async (req, res) => {
 
     res.status(401).json({ success: false, message: 'Invalid credentials' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Login error', error: error.message });
+    console.error('login error:', error);
+    next(error);
   }
 };
 
