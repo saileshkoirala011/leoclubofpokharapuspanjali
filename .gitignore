@@ -24,4 +24,11 @@ dist-ssr
 *.sw?
 
 .vercel
-.env*.local
+
+# Environment variables (never commit secrets)
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example

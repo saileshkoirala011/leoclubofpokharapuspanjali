@@ -27,10 +27,10 @@ export const createContact = async (req, res) => {
     });
   } catch (error) {
     if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map(e => e.message);
-      return res.status(400).json({ success: false, message: errors.join(', ') });
+      const messages = Object.values(error.errors).map(e => e.message);
+      return res.status(400).json({ success: false, message: messages.join(', ') });
     }
-    res.status(500).json({ success: false, message: 'Error saving message', error: error.message });
+    res.status(500).json({ success: false, message: 'Error saving message' });
   }
 };
 
@@ -38,8 +38,8 @@ export const getAllContacts = async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json({ success: true, count: contacts.length, data: contacts });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching contacts', error: error.message });
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error fetching contacts' });
   }
 };
 
@@ -48,8 +48,8 @@ export const getContactById = async (req, res) => {
     const contact = await Contact.findById(req.params.id);
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
     res.status(200).json({ success: true, data: contact });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching contact', error: error.message });
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error fetching contact' });
   }
 };
 
@@ -62,8 +62,8 @@ export const updateContactStatus = async (req, res) => {
     const contact = await Contact.findByIdAndUpdate(req.params.id, { status }, { new: true });
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
     res.status(200).json({ success: true, message: 'Status updated', data: contact });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error updating contact', error: error.message });
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error updating contact' });
   }
 };
 
@@ -72,7 +72,7 @@ export const deleteContact = async (req, res) => {
     const contact = await Contact.findByIdAndDelete(req.params.id);
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
     res.status(200).json({ success: true, message: 'Contact deleted' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error deleting contact', error: error.message });
+  } catch (_error) {
+    res.status(500).json({ success: false, message: 'Error deleting contact' });
   }
 };
