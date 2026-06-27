@@ -1,10 +1,14 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Contact from '../models/Contact.js';
 =======
 import mongoose from 'mongoose';
 import Contact from '../models/contact.js';
 <<<<<<< HEAD
 >>>>>>> origin/devin/1782546707-improve-error-handling
+=======
+import Contact from '../models/Contact.js';
+>>>>>>> origin/devin/1782546733-add-unit-tests
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
