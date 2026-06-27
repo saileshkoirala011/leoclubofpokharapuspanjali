@@ -1,44 +1,47 @@
 import React from "react";
 import { FaHandshake, FaLeaf, FaBook, FaUsers } from "react-icons/fa";
+import SectionHeader from "../Components/ui/SectionHeader";
+
+const workItems = [
+  {
+    icon: <FaHandshake className="text-red-500 text-4xl mb-4" />,
+    title: "Community Service",
+    desc: "Organizing blood donation drives, health camps, and social awareness programs to support the community.",
+  },
+  {
+    icon: <FaLeaf className="text-green-500 text-4xl mb-4" />,
+    title: "Environment",
+    desc: "Tree plantation, clean-up campaigns, and spreading awareness about sustainability and eco-friendly practices.",
+  },
+  {
+    icon: <FaBook className="text-blue-600 text-4xl mb-4" />,
+    title: "Education",
+    desc: "Supporting schools, distributing learning materials, and conducting workshops for students.",
+  },
+  {
+    icon: <FaUsers className="text-purple-600 text-4xl mb-4" />,
+    title: "Youth Empowerment",
+    desc: "Leadership training, skill development workshops, and programs to inspire young people for a brighter future.",
+  },
+];
 
 const Work = () => {
-  const workItems = [
-    {
-      icon: <FaHandshake className="text-red-500 text-4xl mb-4" />,
-      title: "Community Service",
-      desc: "Organizing blood donation drives, health camps, and social awareness programs to support the community.",
-    },
-    {
-      icon: <FaLeaf className="text-green-500 text-4xl mb-4" />,
-      title: "Environment",
-      desc: "Tree plantation, clean-up campaigns, and spreading awareness about sustainability and eco-friendly practices.",
-    },
-    {
-      icon: <FaBook className="text-blue-600 text-4xl mb-4" />,
-      title: "Education",
-      desc: "Supporting schools, distributing learning materials, and conducting workshops for students.",
-    },
-    {
-      icon: <FaUsers className="text-purple-600 text-4xl mb-4" />,
-      title: "Youth Empowerment",
-      desc: "Leadership training, skill development workshops, and programs to inspire young people for a brighter future.",
-    },
-  ];
-
   return (
     <section id="work" className="py-24 bg-gradient-to-b from-white via-blue-50 to-white text-center">
       <div className="max-w-7xl mx-auto px-6">
         {/* Title */}
         <div className="mb-16">
-          <h2 className="text-5xl font-bold text-blue-700 mb-4 flex items-center justify-center gap-3">
-            <FaUsers className="text-blue-600 text-4xl" />
-            Our Work
-          </h2>
-          <p className="text-gray-700 max-w-3xl mx-auto text-lg leading-relaxed">
-            At <span className="font-semibold text-gray-900">Leo Club of Pokhara Puspanjali</span>, 
-            we are committed to impactful community service, environmental protection, education, 
-            and youth empowerment. Here are some of the key areas we focus on:
-          </p>
+          <SectionHeader
+            title="Our Work"
+            subtitle={
+              <>
+                At <span className="font-semibold text-gray-900">Leo Club of Pokhara Puspanjali</span>, 
+                we are committed to impactful community service, environmental protection, education, 
+                and youth empowerment. Here are some of the key areas we focus on:
+              </>
+            }
+            icon={<FaUsers className="text-blue-600 text-4xl" />}
+          />
         </div>
 
         {/* Cards */}
