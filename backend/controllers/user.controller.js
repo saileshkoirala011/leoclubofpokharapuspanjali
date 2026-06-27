@@ -1,42 +1,28 @@
 import User from '../models/user.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import { sendSuccess, sendNotFound } from '../utils/responseHelpers.js';
 
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find().select('-password').sort({ createdAt: -1 });
-    res.status(200).json({ success: true, count: users.length, data: users });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching users', error: error.message });
-  }
-};
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find().select('-password').sort({ createdAt: -1 });
+  sendSuccess(res, { count: users.length, data: users });
+});
 
-export const getUserById = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select('-password');
-    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    res.status(200).json({ success: true, data: user });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching user', error: error.message });
-  }
-};
+export const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password');
+  if (!user) return sendNotFound(res, 'User');
+  sendSuccess(res, { data: user });
+});
 
-export const updateUser = async (req, res) => {
-  try {
-    const updates = req.body;
-    delete updates.password; // Don't allow password update here
-    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select('-password');
-    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    res.status(200).json({ success: true, message: 'User updated', data: user });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error updating user', error: error.message });
-  }
-};
+export const updateUser = asyncHandler(async (req, res) => {
+  const updates = req.body;
+  delete updates.password;
+  const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select('-password');
+  if (!user) return sendNotFound(res, 'User');
+  sendSuccess(res, { message: 'User updated', data: user });
+});
 
-export const deleteUser = async (req, res) => {
-  try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    res.status(200).json({ success: true, message: 'User deleted' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error deleting user', error: error.message });
-  }
-};
+export const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) return sendNotFound(res, 'User');
+  sendSuccess(res, { message: 'User deleted' });
+});

@@ -1,78 +1,49 @@
 import Contact from '../models/contact.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import ApiError from '../utils/ApiError.js';
+import { sendSuccess, sendCreated, sendNotFound } from '../utils/responseHelpers.js';
 
-export const createContact = async (req, res) => {
-  try {
-    const { name, email, subject, message } = req.body;
+export const createContact = asyncHandler(async (req, res) => {
+  const { name, email, subject, message } = req.body;
 
-    if (!name || !email || !subject || !message) {
-      return res.status(400).json({
-        success: false,
-        message: 'All fields are required',
-      });
-    }
-
-    const contact = new Contact({
-      name: name.trim(),
-      email: email.trim(),
-      subject: subject.trim(),
-      message: message.trim(),
-    });
-
-    await contact.save();
-
-    res.status(201).json({
-      success: true,
-      message: 'Message sent successfully',
-      data: contact,
-    });
-  } catch (error) {
-    if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map(e => e.message);
-      return res.status(400).json({ success: false, message: errors.join(', ') });
-    }
-    res.status(500).json({ success: false, message: 'Error saving message', error: error.message });
+  if (!name || !email || !subject || !message) {
+    throw new ApiError(400, 'All fields are required');
   }
-};
 
-export const getAllContacts = async (req, res) => {
-  try {
-    const contacts = await Contact.find().sort({ createdAt: -1 });
-    res.status(200).json({ success: true, count: contacts.length, data: contacts });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching contacts', error: error.message });
-  }
-};
+  const contact = new Contact({
+    name: name.trim(),
+    email: email.trim(),
+    subject: subject.trim(),
+    message: message.trim(),
+  });
 
-export const getContactById = async (req, res) => {
-  try {
-    const contact = await Contact.findById(req.params.id);
-    if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
-    res.status(200).json({ success: true, data: contact });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching contact', error: error.message });
-  }
-};
+  await contact.save();
+  sendCreated(res, { message: 'Message sent successfully', data: contact });
+});
 
-export const updateContactStatus = async (req, res) => {
-  try {
-    const { status } = req.body;
-    if (!['new', 'read', 'replied'].includes(status)) {
-      return res.status(400).json({ success: false, message: 'Invalid status' });
-    }
-    const contact = await Contact.findByIdAndUpdate(req.params.id, { status }, { new: true });
-    if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
-    res.status(200).json({ success: true, message: 'Status updated', data: contact });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error updating contact', error: error.message });
-  }
-};
+export const getAllContacts = asyncHandler(async (req, res) => {
+  const contacts = await Contact.find().sort({ createdAt: -1 });
+  sendSuccess(res, { count: contacts.length, data: contacts });
+});
 
-export const deleteContact = async (req, res) => {
-  try {
-    const contact = await Contact.findByIdAndDelete(req.params.id);
-    if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
-    res.status(200).json({ success: true, message: 'Contact deleted' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error deleting contact', error: error.message });
+export const getContactById = asyncHandler(async (req, res) => {
+  const contact = await Contact.findById(req.params.id);
+  if (!contact) return sendNotFound(res, 'Contact');
+  sendSuccess(res, { data: contact });
+});
+
+export const updateContactStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  if (!['new', 'read', 'replied'].includes(status)) {
+    throw new ApiError(400, 'Invalid status');
   }
-};
+  const contact = await Contact.findByIdAndUpdate(req.params.id, { status }, { new: true });
+  if (!contact) return sendNotFound(res, 'Contact');
+  sendSuccess(res, { message: 'Status updated', data: contact });
+});
+
+export const deleteContact = asyncHandler(async (req, res) => {
+  const contact = await Contact.findByIdAndDelete(req.params.id);
+  if (!contact) return sendNotFound(res, 'Contact');
+  sendSuccess(res, { message: 'Contact deleted' });
+});

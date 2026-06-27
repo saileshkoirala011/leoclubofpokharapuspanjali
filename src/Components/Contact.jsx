@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Footer from "../Page/Footer";
+import { CONTACT_INFO } from "../utils/constants";
 
 const FIELDS = [
   { name: "name",    type: "text",  label: "Name",    placeholder: "Your full name",     minLength: 2,  maxLength: 100  },
@@ -110,7 +111,7 @@ const Contact = () => {
             <div className="space-y-6">
               <ContactInfo
                 label="Address"
-                value="Pokhara, Nepal"
+                value={CONTACT_INFO.address}
                 icon={
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" />
@@ -119,7 +120,7 @@ const Contact = () => {
               />
               <ContactInfo
                 label="Phone"
-                value="+977-61-XXXXXX"
+                value={CONTACT_INFO.phone}
                 icon={
                   /* BUG FIX: previous path was a malformed copy of the email icon */
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -129,7 +130,7 @@ const Contact = () => {
               />
               <ContactInfo
                 label="Email"
-                value="leoclubpokharapuspanjali@gmail.com"
+                value={CONTACT_INFO.email}
                 icon={
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.94 6.412A2 2 0 002 8.414V16a2 2 0 002 2h12a2 2 0 002-2V8.414a2 2 0 00-.94-1.679l-7.017-4.154a2 2 0 00-2.126 0L2.94 6.412z" />

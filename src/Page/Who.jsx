@@ -1,7 +1,6 @@
-import React from "react";  
-// replace with your image path
-import { FaFacebook, FaInstagram } from "react-icons/fa";
+import React from "react";
 import about from "../assets/image.jpeg";
+import SocialLinks from "../Components/ui/SocialLinks";
 
 const About = () => {
   return (
@@ -13,7 +12,7 @@ const About = () => {
         {/* Left: Image */}
         <div>
           { <img
-            src={about} // replace with your image path
+            src={about}
             alt="Leo Club Members"
             className="rounded-lg shadow-lg"
           /> }
@@ -28,7 +27,7 @@ const About = () => {
             Who We Are ?
           </h2>
           <p className="mb-4 leading-relaxed">
-            The Leo Club of Pokhara Puspanjali  is a dedicated children’s
+            The Leo Club of Pokhara Puspanjali  is a dedicated children's
             organization operating under the esteemed International Lions Club,
             which spans the globe. Our club, located in the beautiful city of
             Pokhara, Nepal, is committed to nurturing young leaders and fostering
@@ -43,23 +42,8 @@ const About = () => {
           </p>
 
           {/* Social Media Icons */}
-          <div className="flex space-x-4 mt-8">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-700 text-white p-3 rounded-full hover:bg-blue-800 transition"
-            >
-              <FaFacebook size={20} />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-red-600 text-white p-3 rounded-full hover:bg-red-700 transition"
-            >
-              <FaInstagram size={20} />
-            </a>
+          <div className="mt-8">
+            <SocialLinks variant="colored" />
           </div>
         </div>
       </div>
