@@ -85,12 +85,12 @@ const Contact = () => {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-white to-blue-50">
-      <div className="max-w-6xl mx-auto px-6 py-16 space-y-10">
+      <div className="max-w-5xl mx-auto px-2 py-25 space-y-12">
 
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-blue-600">Contact Us</h1>
-          <p className="text-gray-600 text-lg mt-3 max-w-xl mx-auto">
+          <p className="text-gray-600 text-lg mt-4 max-w-xl mx-auto">
             We're here to help. Reach out with any inquiries or feedback.
           </p>
           <div className="mt-4 w-24 h-1 mx-auto bg-blue-600 rounded-full" />
@@ -252,7 +252,7 @@ const Contact = () => {
         </div>
       </div>
 
-      <Footer />
+      
     </div>
   );
 };

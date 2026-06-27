@@ -1,4 +1,4 @@
-import Contact from '../models/contact.js';
+import Contact from '../models/Contact.js';
 
 export const createContact = async (req, res) => {
   try {
@@ -8,6 +8,12 @@ export const createContact = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'All fields are required',
+        errors: [
+          !name    && { field: 'name',    message: 'Name is required' },
+          !email   && { field: 'email',   message: 'Email is required' },
+          !subject && { field: 'subject', message: 'Subject is required' },
+          !message && { field: 'message', message: 'Message is required' },
+        ].filter(Boolean),
       });
     }
 
@@ -22,15 +28,22 @@ export const createContact = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Message sent successfully',
+      message: 'Contact message saved successfully',
       data: contact,
     });
   } catch (error) {
     if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map(e => e.message);
-      return res.status(400).json({ success: false, message: errors.join(', ') });
+      const errors = Object.values(error.errors).map(err => ({
+        field: err.path,
+        message: err.message,
+      }));
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error: ' + errors.map(e => e.message).join('; '),
+        errors,
+      });
     }
-    res.status(500).json({ success: false, message: 'Error saving message', error: error.message });
+    res.status(500).json({ success: false, message: 'Error saving contact message', error: error.message });
   }
 };
 
@@ -61,7 +74,7 @@ export const updateContactStatus = async (req, res) => {
     }
     const contact = await Contact.findByIdAndUpdate(req.params.id, { status }, { new: true });
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
-    res.status(200).json({ success: true, message: 'Status updated', data: contact });
+    res.status(200).json({ success: true, message: 'Contact status updated', data: contact });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error updating contact', error: error.message });
   }
@@ -71,7 +84,7 @@ export const deleteContact = async (req, res) => {
   try {
     const contact = await Contact.findByIdAndDelete(req.params.id);
     if (!contact) return res.status(404).json({ success: false, message: 'Contact not found' });
-    res.status(200).json({ success: true, message: 'Contact deleted' });
+    res.status(200).json({ success: true, message: 'Contact deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error deleting contact', error: error.message });
   }

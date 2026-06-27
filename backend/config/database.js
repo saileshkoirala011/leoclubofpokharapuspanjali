@@ -13,7 +13,7 @@ const connectDB = async () => {
     return conn;
   } catch (error) {
     console.error(`✗ MongoDB Connection Failed: ${error.message}`);
-    console.error(`\n⚠️  Make sure MongoDB is running locally or update MONGODB_URI in .env\n`);
+    console.error(`\n⚠️  Make sure MongoDB is running. Start it with: mongod\n`);
     return null;
   }
 };

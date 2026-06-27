@@ -1,19 +1,27 @@
 import React from "react";
-import './App.css';
+import "./App.css";
+
+import { Routes, Route } from "react-router-dom";
+
+// Pages / Sections
 import Navbar from "./Page/Navbar";
+import Footer from "./Page/Footer";
+
 import Hero from "./Page/Hero";
 import Who from "./Page/Who";
 import Worker from "./Page/Work";
 import Ourteam from "./Page/Team";
 import Leader from "./Page/Leader";
-import Footer from "./Page/Footer";
-import { Routes, Route } from "react-router-dom";
 
-// Normal imports for route components
+// Route Components
 import Team from "./Components/Teams";
 import Abouts from "./Components/Abouts";
 import Contact from "./Components/Contact";
 import Gallery from "./Components/Gallery";
+
+// Vercel Speed Insights
+import { SpeedInsights } from "@vercel/speed-insights/react";
+
 
 
 const Home = () => {
@@ -24,24 +32,34 @@ const Home = () => {
       <Worker />
       <Ourteam />
       <Leader />
-      <Footer />
     </>
   );
 };
 
+
+// ================= APP =================
 function App() {
   return (
     <div className="App">
+
+      {/* Navbar always visible */}
       <Navbar />
+
+      {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Abouts" element={<Abouts />} />
-        <Route path="/Team" element={<Team />} />
-        <Route path="/Contact" element={<Contact />} />
-        <Route path="/Gallery" element={<Gallery />} />
-       
-        {/* Add other routes as needed */}
+        <Route path="/about" element={<Abouts />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Routes>
+
+      {/* Footer always visible */}
+      <Footer />
+
+      {/* Vercel Speed Insights */}
+      <SpeedInsights />
+
     </div>
   );
 }
