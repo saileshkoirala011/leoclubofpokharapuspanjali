@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig(({ mode }) => ({
-  base: "/",
+  base: process.env.VITE_BASE_PATH || "/leoclubofpokharapuspanjali/",
 
   plugins: [react(), tailwindcss()],
 

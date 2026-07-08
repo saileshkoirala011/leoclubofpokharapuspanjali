@@ -7,7 +7,7 @@ import "./index.css";
 
 // In production (GitHub Pages) the app is served under /leoclubofpokharapuspanjali/
 // In dev it's served from /
-const basename = "/";
+const basename = "/leoclubofpokharapuspanjali";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
