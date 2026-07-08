@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "leoclubofpokharapuspanjali",
   "private": true,
   "version": "1.0.0",
@@ -9,5 +9,8 @@
     "client:preview": "npm --prefix client run preview",
     "server:dev": "npm --prefix backend run dev",
     "server:start": "npm --prefix backend start"
+  },
+  "devDependencies": {
+    "vite": "^8.1.3"
   }
 }
