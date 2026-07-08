@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Name is required"],
       trim: true,
-      maxlength: 100,
+      maxlength: [100, "Name cannot exceed 100 characters"],
     },
     email: {
       type: String,
@@ -15,11 +15,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Please provide a valid email"],
     },
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: 8,
+      minlength: [8, "Password must be at least 8 characters"],
       select: false,
     },
     role: {
@@ -27,20 +28,26 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    createdAt: {
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    avatar: {
+      type: String,
+      default: null,
+    },
+    lastLogin: {
       type: Date,
-      default: Date.now,
+      default: null,
     },
   },
   { timestamps: true }
 );
 
+// Hash password before saving
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  const salt = await bcrypt.genSalt(10);
+  if (!this.isModified("password")) return next();
+  const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
@@ -49,10 +56,14 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+// Strip sensitive fields from JSON output
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
   return obj;
 };
+
+// Index for faster email lookups
+userSchema.index({ email: 1 });
 
 export default mongoose.model("User", userSchema);

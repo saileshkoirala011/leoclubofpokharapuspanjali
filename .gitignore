@@ -24,10 +24,6 @@ dist-ssr
 *.sw?
 
 .vercel
-<<<<<<< HEAD
-.env*.local
-.env*
-=======
 
 # Environment variables (never commit secrets)
 .env
@@ -36,4 +32,4 @@ dist-ssr
 backend/.env
 backend/.env.*
 !backend/.env.example
->>>>>>> origin/devin/1782546719-security-fixes
+client/.env.local

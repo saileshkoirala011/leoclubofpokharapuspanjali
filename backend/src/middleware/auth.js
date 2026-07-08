@@ -1,41 +1,32 @@
-import jwt from "jsonwebtoken";
 import ApiError from "../utils/ApiError.js";
 import User from "../models/User.js";
-import { JWT_SECRET } from "../config/env.js";
+import generateToken from "../utils/generateToken.js";
 
-const protect = async (req, res, next) => {
-  let token = null;
+export const protect = async (req, res, next) => {
+  let token =
+    req.cookies?.token ||
+    (req.headers.authorization?.startsWith("Bearer ") && req.headers.authorization.split(" ")[1]);
 
-  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-    token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookies && req.cookies.token) {
-    token = req.cookies.token;
-  }
-
-  if (!token) {
-    return next(new ApiError("Not authorized", 401));
-  }
+  if (!token) return next(new ApiError("Not authorized — no token", 401));
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] });
+    const decoded = generateToken.verifyAccess(token);
     const user = await User.findById(decoded.id).select("-password");
-    if (!user) {
-      return next(new ApiError("User not found", 401));
-    }
+
+    if (!user) return next(new ApiError("User not found", 401));
+    if (!user.isActive) return next(new ApiError("Account is deactivated", 403));
 
     req.user = user;
     next();
-  } catch (error) {
-    return next(new ApiError("Not authorized, token invalid", 401));
+  } catch (err) {
+    const message = err.name === "TokenExpiredError" ? "Token expired" : "Invalid token";
+    return next(new ApiError(message, 401));
   }
 };
 
-const authorize = (...roles) => (req, res, next) => {
+export const authorize = (...roles) => (req, res, next) => {
   if (!req.user || !roles.includes(req.user.role)) {
-    return next(new ApiError("Forbidden", 403));
+    return next(new ApiError("Forbidden — insufficient permissions", 403));
   }
-
   next();
 };
-
-export { protect, authorize };

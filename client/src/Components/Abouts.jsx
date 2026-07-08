@@ -1,125 +1,129 @@
 import React from "react";
 
-const Abouts = () => {
-  return (
-    <section className="w-full">
-      {/* Hero Section */}
-    <div className="py-16 sm:py-28 px-4 sm:px-1 mb-2">
-    <div className="text-center px-2">
-    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-700 mb-4">
-      About Us
-    </h1>
-    <p className="mt-3 text-lg sm:text-xl text-gray-700 font-light">
-      Leo Club of Pokhara Puspanjali
-    </p>
+const mottoItems = [
+  {
+    icon: <path d="M10 2a3 3 0 100 6 3 3 0 000-6zM4 14s1-2 6-2 6 2 6 2v2H4v-2z" />,
+    title: "Leadership",
+    desc: "Developing confident and ethical leaders ready to serve.",
+    bg: "bg-blue-50", color: "text-blue-600",
+  },
+  {
+    icon: <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />,
+    title: "Experience",
+    desc: "Real-world projects that build skills and confidence.",
+    bg: "bg-emerald-50", color: "text-emerald-600",
+  },
+  {
+    icon: <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM6.293 6.707a1 1 0 011.414-1.414l.707.707A1 1 0 116.293 7.414l-.707-.707zM3 11a1 1 0 100 2h1a1 1 0 100-2H3zM16 11a1 1 0 100 2h1a1 1 0 100-2h-1zM13.293 6.707a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 14a4 4 0 100-8 4 4 0 000 8z" />,
+    title: "Opportunity",
+    desc: "Connect with mentors and create lifelong networks.",
+    bg: "bg-amber-50", color: "text-amber-600",
+  },
+];
+
+const activities = [
+  "Organize environmental campaigns, cleanups & tree plantations",
+  "Conduct health camps, blood donation drives & awareness programs",
+  "Provide tutoring, scholarships & educational support",
+  "Host leadership & skill-development workshops for youth",
+  "Support disaster relief & rehabilitation efforts in emergencies",
+];
+
+const PageBanner = ({ title, subtitle }) => (
+  <div className="relative bg-gradient-to-br from-blue-800 via-blue-700 to-blue-900 py-28 px-5 text-center overflow-hidden">
+    <div className="absolute -top-16 -left-16 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="absolute -bottom-12 -right-12 w-56 h-56 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative z-10">
+      <span className="inline-block bg-white/10 text-white/90 text-xs font-bold tracking-[0.15em] uppercase px-4 py-1.5 rounded-full mb-5 border border-white/15">
+        Leo Club of Pokhara Puspanjali
+      </span>
+      <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-4">{title}</h1>
+      <p className="text-blue-100/80 text-lg max-w-xl mx-auto font-light">{subtitle}</p>
+    </div>
   </div>
-</div>
+);
 
+const Abouts = () => (
+  <section className="w-full">
+    <PageBanner
+      title="About Us"
+      subtitle="Learn about our mission, values, and the work we do for our community."
+    />
 
+    <div className="max-w-5xl mx-auto px-5 sm:px-8 py-20 space-y-20">
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-20 space-y-10 sm:space-y-20">
-
-        {/* Who We Are */}
-        <div className="bg-white/90 backdrop-blur-md p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 hover:shadow-xl transition-all">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-700 mb-4 sm:mb-6">Who We Are</h2>
-          <p className="text-gray-800 leading-relaxed text-base sm:text-lg">
-            Leo Club of Pokhara Puspanjali is a youth-driven community service organization 
-            committed to leadership development, humanitarian action, and positive change.
-            We unite young minds to serve the community, build essential life skills, 
-            and create impactful social projects across Nepal.
-          </p>
+      {/* Who We Are */}
+      <div className="grid sm:grid-cols-5 gap-6 sm:gap-10 items-start">
+        <div className="sm:col-span-2">
+          <div className="w-8 h-1 bg-blue-600 rounded-full mb-3" />
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Who We Are</h2>
         </div>
+        <p className="sm:col-span-3 text-gray-600 leading-relaxed text-[15px]">
+          Leo Club of Pokhara Puspanjali is a youth-driven community service organization committed to leadership development, humanitarian action, and positive change. We unite young minds to serve the community, build essential life skills, and create impactful social projects across Nepal.
+        </p>
+      </div>
 
-        {/* Our Mission */}
-        <div className="bg-white/90 backdrop-blur-md p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 hover:shadow-xl transition-all">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-700 mb-4 sm:mb-6">Our Mission</h2>
-          <p className="text-gray-800 leading-relaxed text-base sm:text-lg">
-            Our mission is to empower youth through meaningful service in health, education,
-            environment, and disaster relief while nurturing leadership, compassion,
-            and community engagement. We aim to build responsible leaders who create
-            long-lasting social impact.
-          </p>
+      <div className="border-t border-gray-100" />
+
+      {/* Our Mission */}
+      <div className="grid sm:grid-cols-5 gap-6 sm:gap-10 items-start">
+        <div className="sm:col-span-2">
+          <div className="w-8 h-1 bg-blue-600 rounded-full mb-3" />
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Our Mission</h2>
         </div>
+        <p className="sm:col-span-3 text-gray-600 leading-relaxed text-[15px]">
+          Our mission is to empower youth through meaningful service in health, education, environment, and disaster relief while nurturing leadership, compassion, and community engagement. We aim to build responsible leaders who create long-lasting social impact.
+        </p>
+      </div>
 
-        {/* What We Do */}
-        <div className="bg-white/90 backdrop-blur-md p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 hover:shadow-xl transition-all">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-700 mb-6 sm:mb-8">What We Do</h2>
+      <div className="border-t border-gray-100" />
 
-          <ul className="space-y-3 sm:space-y-4 text-base sm:text-lg text-gray-800">
-            <li className="flex items-start gap-4">
-              <span className="text-blue-600 text-2xl flex-shrink-0">•</span>
-              <span className="leading-relaxed">Organize environmental campaigns, cleanups & tree plantations</span>
-            </li>
-            <li className="flex items-start gap-4">
-              <span className="text-blue-600 text-2xl flex-shrink-0">•</span>
-              <span className="leading-relaxed">Conduct health camps, blood donation drives & awareness programs</span>
-            </li>
-            <li className="flex items-start gap-4">
-              <span className="text-blue-600 text-2xl flex-shrink-0">•</span>
-              <span className="leading-relaxed">Provide tutoring, scholarships & educational support</span>
-            </li>
-            <li className="flex items-start gap-4">
-              <span className="text-blue-600 text-2xl flex-shrink-0">•</span>
-              <span className="leading-relaxed">Host leadership & skill-development workshops for youth</span>
-            </li>
-            <li className="flex items-start gap-4">
-              <span className="text-blue-600 text-2xl flex-shrink-0">•</span>
-              <span className="leading-relaxed">Support disaster relief & rehabilitation efforts in emergencies</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Motto Section */}
-        <div className="text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-700 mb-8 sm:mb-12">Our Motto</h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-
-            {/* Card 1 */}
-            <div className="p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all group">
-              <div className="mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center text-blue-700 rounded-2xl mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 sm:w-10 h-8 sm:h-10" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2a3 3 0 100 6 3 3 0 000-6zM4 14s1-2 6-2 6 2 6 2v2H4v-2z" />
-                </svg>
+      {/* What We Do */}
+      <div>
+        <div className="w-8 h-1 bg-blue-600 rounded-full mb-3" />
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-8">What We Do</h2>
+        <div className="grid sm:grid-cols-2 gap-3">
+          {activities.map((act, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-4 p-4 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-all duration-200 group"
+            >
+              <div className="w-7 h-7 rounded-lg bg-blue-100 group-hover:bg-blue-200 text-blue-700 flex items-center justify-center flex-shrink-0 text-xs font-bold transition-colors">
+                {i + 1}
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">Leadership</h3>
-              <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-                Developing confident and ethical leaders.
-              </p>
+              <p className="text-gray-700 text-sm leading-relaxed">{act}</p>
             </div>
-
-            {/* Card 2 */}
-            <div className="p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all group">
-              <div className="mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center text-green-600 rounded-2xl mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 sm:w-10 h-8 sm:h-10" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" />
-                </svg>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">Experience</h3>
-              <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-                Real-world projects that build skills & confidence.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-lg border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all group">
-              <div className="mx-auto w-16 sm:w-20 h-16 sm:h-20 flex items-center justify-center text-yellow-600 rounded-2xl mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 sm:w-10 h-8 sm:h-10" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2a6 6 0 100 12A6 6 0 0010 2zm1 9V7H9v4H5v2h10v-2h-4z" />
-                </svg>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">Opportunity</h3>
-              <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-                Connect with mentors and create lifelong networks.
-              </p>
-            </div>
-
-          </div>
+          ))}
         </div>
       </div>
-    </section>
-  );
-};
+
+      <div className="border-t border-gray-100" />
+
+      {/* Our Motto */}
+      <div>
+        <div className="text-center mb-10">
+          <div className="w-8 h-1 bg-blue-600 rounded-full mx-auto mb-3" />
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Our Motto</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {mottoItems.map(({ icon, title, desc, bg, color }) => (
+            <div
+              key={title}
+              className="group p-8 rounded-2xl border border-gray-100 hover:border-blue-100 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 text-center bg-white"
+            >
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5 ${bg} group-hover:scale-110 transition-transform duration-300`}>
+                <svg className={`w-7 h-7 ${color}`} fill="currentColor" viewBox="0 0 20 20">
+                  {icon}
+                </svg>
+              </div>
+              <h3 className="text-base font-bold text-gray-900 mb-2">{title}</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 export default Abouts;

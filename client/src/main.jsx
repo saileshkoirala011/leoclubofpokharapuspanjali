@@ -5,10 +5,14 @@ import App from "./App";
 import ErrorBoundary from "./Components/ErrorBoundary";
 import "./index.css";
 
+// In production (GitHub Pages) the app is served under /leoclubofpokharapuspanjali/
+// In dev it's served from /
+const basename = import.meta.env.PROD ? "/leoclubofpokharapuspanjali" : "/";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <App />
       </BrowserRouter>
     </ErrorBoundary>
