@@ -1,67 +1,13 @@
-{
-  "homepage": "https://saileshkoirala011.github.io/leoclubofpokharapuspanjali",
-  "name": "my-app",
+﻿{
+  "name": "leoclubofpokharapuspanjali",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start": "npm start",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  },
-  "dependencies": {
-    "@tailwindcss/postcss": "^4.3.1",
-    "@vercel/speed-insights": "^2.0.0",
-    "autoprefixer": "^10.x.x",
-    "bcrypt": "^6.0.0",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.5.2",
-    "express-validator": "^7.3.2",
-    "helmet": "^8.2.0",
-    "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.3.0",
-    "mongoose": "^9.7.2",
-    "postcss": "^8.x.x",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-icons": "^5.5.0",
-    "react-native-web": "^0.21.2",
-    "react-router-dom": "^7.10.1"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@tailwindcss/vite": "^4.3.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "autoprefixer": "^10.4.24",
-    "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.39.1",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "gh-pages": "^6.3.0",
-    "globals": "^16.5.0",
-    "jsdom": "^28.1.0",
-    "postcss": "^8.5.6",
-    "rollup-plugin-visualizer": "^6.0.5",
-    "tailwindcss": "^4.3.1",
-<<<<<<< HEAD
-    "vite": "^7.3.5"
-=======
-    "vite": "^7.3.1",
-    "vitest": "^4.1.9"
->>>>>>> origin/devin/1782546733-add-unit-tests
+    "dev": "npm run client:dev",
+    "client:dev": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "client:preview": "npm --prefix client run preview",
+    "server:dev": "npm --prefix backend run dev",
+    "server:start": "npm --prefix backend start"
   }
 }
