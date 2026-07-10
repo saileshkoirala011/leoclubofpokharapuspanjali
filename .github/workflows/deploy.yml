@@ -1,21 +1,15 @@
-name: Deploy Frontend to GitHub Pages
+name: Deploy
 
 on:
   push:
     branches: [main]
-    paths:
-      - "client/**"
-  workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
-  deploy:
+  # ── Deploy frontend to Vercel ────────────────────────────────────────────────
+  deploy-frontend:
+    name: Deploy Frontend → Vercel
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: client
+    environment: production
 
     steps:
       - uses: actions/checkout@v4
@@ -23,20 +17,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: client/package-lock.json
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
 
-      - name: Build
-        run: npm run build
+      - name: Deploy to Vercel (production)
+        run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: frontend
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VERCEL_ORG_ID:     ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: client/dist
-          cname: ""
+  # ── Deploy backend to Render ─────────────────────────────────────────────────
+  deploy-backend:
+    name: Deploy Backend → Render
+    runs-on: ubuntu-latest
+    environment: production
+    needs: deploy-frontend
+
+    steps:
+      - name: Trigger Render deploy hook
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" \
+            --fail --silent --show-error
