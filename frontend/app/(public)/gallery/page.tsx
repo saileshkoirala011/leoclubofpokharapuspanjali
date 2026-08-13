@@ -52,10 +52,10 @@ export default function GalleryPage() {
         <div className="flex flex-wrap gap-2 mb-10 justify-center">
           {CATS.map((c) => (
             <button key={c} onClick={() => { setCat(c); setLightbox(null); }}
-              className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border transition-all duration-200 ${
+              className={`px-5 py-2 text-xs font-bold uppercase tracking-wider border transition-all duration-200 ${
                 cat === c
-                  ? "bg-[#0a1628] text-[#c9a84c] border-[#c9a84c]/40 shadow-md"
-                  : "bg-white text-gray-500 border-gray-200 hover:border-[#c9a84c]/40 hover:text-[#c9a84c]"
+                  ? "bg-[#050d1a] text-[#C8102E] border-[#C8102E]/40"
+                  : "bg-white text-gray-400 border-gray-200 hover:border-[#C8102E]/30 hover:text-[#050d1a]"
               }`}>
               {c}
             </button>
@@ -66,14 +66,14 @@ export default function GalleryPage() {
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
           {filtered.map((item, i) => (
             <button key={`${item.src}-${i}`} onClick={() => setLightbox(i)}
-              className="group relative overflow-hidden rounded-2xl bg-gray-100 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 break-inside-avoid block"
+              className="group relative overflow-hidden bg-gray-100 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C8102E] focus-visible:ring-offset-2 break-inside-avoid block"
               aria-label={`View photo ${i + 1} — ${item.label}`}>
               <div className={`relative w-full ${item.tall ? "h-80" : "h-56"}`}>
                 <Image src={item.src} alt={`${item.label} ${i + 1}`} fill loading="lazy"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" />
               </div>
-              <div className="absolute inset-0 bg-[#0a1628]/0 group-hover:bg-[#0a1628]/50 transition-colors duration-300 flex items-center justify-center">
+              <div className="absolute inset-0 bg-[#050d1a]/0 group-hover:bg-[#050d1a]/50 transition-colors duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-11 h-11 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
                   <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
@@ -132,7 +132,7 @@ export default function GalleryPage() {
             <div className="flex gap-1.5">
               {filtered.map((_, i) => (
                 <button key={i} onClick={(e) => { e.stopPropagation(); setLightbox(i); }}
-                  className={`rounded-full transition-all duration-300 ${i === lightbox ? "w-6 h-1.5 bg-[#c9a84c]" : "w-1.5 h-1.5 bg-white/30 hover:bg-white/60"}`} />
+                  className={`transition-all duration-300 ${i === lightbox ? "w-8 h-[3px] bg-[#C8102E]" : "w-[3px] h-[3px] bg-white/30 hover:bg-white/60"}`} />
               ))}
             </div>
             <span className="text-white/40 text-xs">{lightbox + 1} / {filtered.length}</span>

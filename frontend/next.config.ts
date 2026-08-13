@@ -1,16 +1,30 @@
 import type { NextConfig } from "next";
+import path from "path";
+
+const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  // Points Next.js to the monorepo root so it doesn't get confused
+  // by a lockfile in a parent directory (C:\Users\Saile on Windows).
+  outputFileTracingRoot: path.join(__dirname, "../../"),
+
   images: {
-    // Allow all local images via /images/* served from public/
     remotePatterns: [],
   },
+
   async rewrites() {
+    // In development: proxy /api/* → local Express backend.
+    // In production on Vercel: vercel.json rewrites handle this instead.
+    if (!isDev) return [];
+
+    const backendRoot = (
+      process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api"
+    ).replace(/\/api$/, "");
+
     return [
       {
-        // Proxy /api/* to the Express backend in development
         source:      "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api"}/:path*`,
+        destination: `${backendRoot}/api/:path*`,
       },
     ];
   },

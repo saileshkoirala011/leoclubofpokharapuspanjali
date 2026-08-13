@@ -8,8 +8,8 @@ export const NAV_LINKS = [
 ] as const;
 
 export const SOCIAL_LINKS = {
-  facebook:  "https://www.facebook.com/LeoClubPokharaPuspanjali",
-  instagram: "https://www.instagram.com/LeoClubPokharaPuspanjali",
+  facebook:  "https://www.facebook.com/profile.php?id=100083652833637",
+  instagram: "https://www.instagram.com/leo_club_of_pokhara_puspanjali?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
 } as const;
 
 export const CONTACT_INFO = {
@@ -18,7 +18,7 @@ export const CONTACT_INFO = {
   email:   "leoclubpokharapuspanjali@gmail.com",
 } as const;
 
-export const JOIN_FORM_URL = "/contact";
+export const JOIN_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScBy6curYxGtx5ZHAviohkWSBIFlp0QOkaxF6wHOXez_sHjgQ/viewform?usp=header";
 
 /**
  * In Next.js, images live in /public/images/.

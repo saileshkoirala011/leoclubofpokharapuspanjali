@@ -17,7 +17,7 @@ const envSchema = z.object({
 
   CSRF_SECRET: z.string().min(32, "CSRF_SECRET must be ≥ 32 chars"),
 
-  FRONTEND_URL: z.string().url().default("http://localhost:5173"),
+  FRONTEND_URL: z.string().url().default("http://localhost:3000"),
 
   SMTP_HOST: z.string().default("smtp.ethereal.email"),
   SMTP_PORT: z.coerce.number().default(587),

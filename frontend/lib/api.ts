@@ -38,11 +38,12 @@ api.interceptors.response.use(
     const original = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
     // Only retry once, and only on 401 from non-auth endpoints
+    const url = (original.url ?? "");
     if (
       error.response?.status !== 401 ||
       original._retry ||
-      original.url?.includes("/auth/refresh") ||
-      original.url?.includes("/auth/login")
+      url.includes("/auth/refresh") ||
+      url.includes("/auth/login")
     ) {
       return Promise.reject(error);
     }

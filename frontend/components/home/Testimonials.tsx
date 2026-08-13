@@ -1,17 +1,18 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Quote, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const TESTIMONIALS = [
   {
     id: 1,
     name: 'Aarav Sharma',
     role: 'Community Member',
-    content: 'The Leo Club has transformed our neighborhood. Their dedication to service and youth empowerment is truly inspiring. I\'ve seen firsthand the positive impact they\'ve made.',
+    content: "The Leo Club has transformed our neighborhood. Their dedication to service and youth empowerment is truly inspiring. I've seen firsthand the positive impact they've made.",
     rating: 5,
-    image: '/images/image.jpeg',
+    avatar: 'A',
+    color: '#1B3A6B',
   },
   {
     id: 2,
@@ -19,153 +20,120 @@ const TESTIMONIALS = [
     role: 'Volunteer',
     content: 'Being part of this club has been life-changing. The leadership training and community service opportunities have helped me grow both personally and professionally.',
     rating: 5,
-    image: '/images/image.jpeg',
+    avatar: 'P',
+    color: '#5BB8E8',
   },
   {
     id: 3,
     name: 'Rajesh Gurung',
     role: 'Local Business Owner',
-    content: 'I\'ve supported the Leo Club for years because they consistently deliver results. Their transparency and commitment to making a difference sets them apart.',
+    content: "I've supported the Leo Club for years because they consistently deliver results. Their transparency and commitment to making a difference sets them apart.",
     rating: 5,
-    image: '/images/image.jpeg',
+    avatar: 'R',
+    color: '#D4A017',
   },
 ];
 
 export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % TESTIMONIALS.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-  };
+  const [idx, setIdx] = useState(0);
+  const t = TESTIMONIALS[idx];
 
   return (
-    <section ref={sectionRef} className="py-24 overflow-hidden" style={{ background: 'linear-gradient(180deg, #DCF0FB 0%, #EEF8FD 100%)' }}>
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 lg:py-28 overflow-hidden bg-mesh">
+      <div className="max-w-5xl mx-auto px-6 sm:px-10">
+
         {/* Header */}
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="inline-block"
-          >
-            <span className="inline-block px-4 py-2 bg-royal/10 text-royal rounded-full text-sm font-semibold mb-4">
-              Testimonials
+        <div className="text-center mb-14">
+          <span className="chip chip-blue mb-5">Testimonials</span>
+          <h2 className="font-display text-4xl sm:text-5xl font-black text-[#1E293B] leading-[1.1]">
+            What People{' '}
+            <span style={{ background: "linear-gradient(135deg,#1B3A6B,#4A7FD4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+              Say
             </span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] mb-4"
-            style={{ color: '#0d2657' }}
-          >
-            What People
-            <span className="crimson-text"> Say</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-royal/60 text-lg max-w-2xl mx-auto"
-          >
-            Hear from our community members, volunteers, and supporters
-          </motion.p>
+          </h2>
         </div>
 
-        {/* Testimonial Carousel */}
-        <div className="relative max-w-4xl mx-auto">
+        {/* Card */}
+        <AnimatePresence mode="wait">
           <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, x: 50
- }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white rounded-3xl p-8 sm:p-12 shadow-card-hover"
+            key={idx}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35 }}
+            className="card p-8 sm:p-12 relative"
+            style={{ border: "1px solid #D6EAF8" }}
           >
-            {/* Quote Icon */}
-            <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-royal/10 flex items-center justify-center">
-                <Quote size={32} className="text-royal" />
-              </div>
-            </div>
-
-            {/* Content */}
-            <p className="text-royal/80 text-lg sm:text-xl leading-relaxed text-center mb-8 font-medium">
-              "{TESTIMONIALS[currentIndex].content}"
-            </p>
-
-            {/* Author */}
-            <div className="flex items-center justify-center gap-4">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-royal/10">
-                <div className="w-full h-full flex items-center justify-center text-royal font-bold text-xl">
-                  {TESTIMONIALS[currentIndex].name.charAt(0)}
-                </div>
-              </div>
-              <div className="text-left">
-                <h4 className="font-display font-bold text-lg" style={{ color: '#0d2657' }}>
-                  {TESTIMONIALS[currentIndex].name}
-                </h4>
-                <p className="text-royal/60 text-sm">{TESTIMONIALS[currentIndex].role}</p>
-                <div className="flex gap-1 mt-1">
-                  {[...Array(TESTIMONIALS[currentIndex].rating)].map((_, i) => (
-                    <Star key={i} size={16} className="fill-lions text-lions" />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-center gap-4 mt-8">
-            <button
-              onClick={prevTestimonial}
-              className="w-12 h-12 rounded-full bg-white shadow-medium flex items-center justify-center hover:shadow-large transition-all duration-200 hover:scale-110"
-              aria-label="Previous testimonial"
+            {/* Big quote */}
+            <div
+              className="absolute top-6 right-8 font-display text-7xl font-black leading-none select-none pointer-events-none"
+              style={{ color: t.color, opacity: 0.08 }}
             >
-              <ChevronLeft size={24} className="text-royal" />
-            </button>
-            <div className="flex items-center gap-2">
-              {TESTIMONIALS.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? 'w-8 bg-royal' : 'bg-royal/30 hover:bg-royal/50'
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                />
+              &rdquo;
+            </div>
+
+            {/* Stars */}
+            <div className="flex gap-1 mb-6">
+              {[...Array(t.rating)].map((_, i) => (
+                <svg key={i} className="w-5 h-5" viewBox="0 0 20 20" fill="#D4A017">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
               ))}
             </div>
-            <button
-              onClick={nextTestimonial}
-              className="w-12 h-12 rounded-full bg-white shadow-medium flex items-center justify-center hover:shadow-large transition-all duration-200 hover:scale-110"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight size={24} className="text-royal" />
-            </button>
-          </div>
-        </div>
+
+            <p className="text-[#1E293B] text-xl sm:text-2xl font-medium leading-relaxed mb-10 text-balance">
+              &ldquo;{t.content}&rdquo;
+            </p>
+
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-4">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center font-display text-xl font-black text-white flex-shrink-0"
+                  style={{ background: `linear-gradient(135deg, ${t.color}, ${t.color}99)`, boxShadow: `0 4px 16px ${t.color}33` }}
+                >
+                  {t.avatar}
+                </div>
+                <div>
+                  <p className="font-display font-bold text-[#1E293B] text-[15px]">{t.name}</p>
+                  <p className="text-[13px] text-[#64748B] font-medium">{t.role}</p>
+                </div>
+              </div>
+
+              {/* Navigation */}
+              <div className="flex items-center gap-2">
+                {TESTIMONIALS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setIdx(i)}
+                    aria-label={`Testimonial ${i + 1}`}
+                    className="transition-all duration-300 rounded-full"
+                    style={{
+                      width: i === idx ? "2rem" : "0.5rem",
+                      height: "0.5rem",
+                      background: i === idx ? t.color : "#D6EAF8",
+                    }}
+                  />
+                ))}
+                <div className="flex gap-1.5 ml-3">
+                  <button
+                    onClick={() => setIdx(p => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
+                    aria-label="Previous"
+                    className="w-9 h-9 rounded-full bg-[#F0F6FF] text-[#1B3A6B] flex items-center justify-center hover:bg-[#1B3A6B] hover:text-white transition-all"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={() => setIdx(p => (p + 1) % TESTIMONIALS.length)}
+                    aria-label="Next"
+                    className="w-9 h-9 rounded-full bg-[#1B3A6B] text-white flex items-center justify-center hover:bg-[#0D2146] transition-all"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

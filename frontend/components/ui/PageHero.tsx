@@ -8,32 +8,55 @@ interface PageHeroProps {
 
 export default function PageHero({ label, title, subtitle }: PageHeroProps) {
   return (
-    <div className="relative py-28 px-5 text-center overflow-hidden" style={{
-      background: "linear-gradient(160deg, #5BB8E8 0%, #87CEEB 20%, #B8E4F7 55%, #DCF0FB 85%, #ffffff 100%)"
-    }}>
+    <div className="relative pt-36 pb-24 px-6 text-center overflow-hidden bg-hero-gradient">
 
-      {/* Mountain silhouette bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none" style={{
-        background: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 65'%3E%3Cpath d='M0,65 L0,40 L120,15 L240,32 L360,8 L480,25 L600,3 L720,20 L840,5 L960,22 L1080,10 L1200,28 L1320,12 L1440,30 L1440,65 Z' fill='white'/%3E%3C/svg%3E\")",
-        backgroundSize: "100% 100%",
-      }} />
+      {/* Decorative orbs */}
+      <div
+        className="absolute -top-32 -left-32 w-96 h-96 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(74,127,212,0.35) 0%, transparent 70%)" }}
+      />
+      <div
+        className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(135,206,235,0.25) 0%, transparent 70%)" }}
+      />
 
-      {/* Soft glow orbs */}
-      <div className="absolute top-0 left-1/4 w-80 h-80 bg-white/40 rounded-full blur-[80px] pointer-events-none" />
-      <div className="absolute top-1/3 right-1/4 w-60 h-60 bg-[#C8102E]/8 rounded-full blur-[60px] pointer-events-none" />
+      {/* Subtle dot grid */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.06]"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)",
+          backgroundSize:  "28px 28px",
+        }}
+      />
 
-      {/* Nepal flag accent line at top */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-crimson via-crimson-light to-crimson" />
+      <div className="relative z-10 max-w-3xl mx-auto animate-fadeUp">
+        {/* Chip */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 text-[11px] font-bold uppercase tracking-[0.12em]"
+          style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)", color: "#87CEEB" }}>
+          <span className="w-1.5 h-1.5 rounded-full bg-sky-300 animate-pulse" />
+          {label}
+        </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto">
-        <span className="section-pill mb-5">{label}</span>
-        <h1 className="font-display text-5xl sm:text-6xl font-black mb-5 mt-4 leading-[1.05]"
-          style={{ color: "#0d2657" }}>
+        {/* Title */}
+        <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight mb-5">
           {title}
         </h1>
-        <p className="text-royal/60 text-lg max-w-xl mx-auto font-light leading-relaxed">
+
+        {/* Subtitle */}
+        <p className="text-white/55 text-lg sm:text-xl max-w-xl mx-auto font-light leading-relaxed">
           {subtitle}
         </p>
+
+        {/* Bottom decorative line */}
+        <div className="flex items-center justify-center gap-3 mt-10">
+          <div className="h-px w-12 bg-white/20" />
+          <div className="flex gap-1">
+            {[0,1,2].map(i => (
+              <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/30" />
+            ))}
+          </div>
+          <div className="h-px w-12 bg-white/20" />
+        </div>
       </div>
     </div>
   );

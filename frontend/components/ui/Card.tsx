@@ -9,21 +9,23 @@ export interface CardProps {
   hover?:     boolean;
   accent?:    "royal" | "crimson" | "gold" | "none";
   onClick?:   () => void;
+  elevated?:  boolean;
 }
 
 const accentClass = {
-  royal:   "border-t-royal",
-  crimson: "border-t-crimson",
-  gold:    "border-t-gold",
+  royal:   "border-t-4 border-royal",
+  crimson: "border-t-4 border-crimson",
+  gold:    "border-t-4 border-gold",
   none:    "",
 };
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ children, className = "", hover = false, accent = "none", onClick }, ref) => {
+  ({ children, className = "", hover = false, accent = "none", onClick, elevated = false }, ref) => {
     const cls = [
       "card",
-      hover ? "card-hover cursor-pointer" : "",
-      accent !== "none" ? `border-t-4 ${accentClass[accent]}` : "",
+      hover ? "cursor-pointer" : "",
+      accent !== "none" ? accentClass[accent] : "",
+      elevated ? "shadow-lg" : "",
       className,
     ].filter(Boolean).join(" ");
 
@@ -36,7 +38,17 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ 
+            y: -8, 
+            boxShadow: accent === "royal" 
+              ? "0 20px 40px rgba(27,58,107,0.15)" 
+              : accent === "crimson" 
+                ? "0 20px 40px rgba(200,16,46,0.15)" 
+                : accent === "gold" 
+                  ? "0 20px 40px rgba(232,160,0,0.15)" 
+                  : "0 20px 40px rgba(0,0,0,0.1)"
+          }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
         >
           {children}
         </motion.div>
@@ -44,9 +56,17 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     }
 
     return (
-      <div ref={ref} className={cls} onClick={onClick}>
+      <motion.div
+        ref={ref}
+        className={cls}
+        onClick={onClick}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
         {children}
-      </div>
+      </motion.div>
     );
   }
 );

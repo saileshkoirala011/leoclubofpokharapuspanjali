@@ -2,12 +2,11 @@ import { Router } from "express";
 import { createContact, listContacts, deleteContact } from "../controllers/contact.controller.js";
 import { authenticate } from "../middleware/authenticate.js";
 import { requireRole }  from "../middleware/authorize.js";
-import { apiLimiter }   from "../middleware/rateLimiter.js";
 
 const router = Router();
 
-/** POST /api/contacts — public, rate-limited */
-router.post("/", apiLimiter, createContact);
+/** POST /api/contacts — public */
+router.post("/", createContact);
 
 /** GET /api/contacts — admin only */
 router.get("/", authenticate, requireRole("admin"), listContacts);

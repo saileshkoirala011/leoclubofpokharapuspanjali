@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 export interface ButtonProps {
-  variant?:   "primary" | "secondary" | "gold" | "crimson" | "ghost" | "outline-white";
+  variant?:   "primary" | "secondary" | "gold" | "crimson" | "ghost" | "outline-white" | "gradient-royal" | "gradient-gold";
   size?:      "sm" | "md" | "lg" | "xl";
   isLoading?: boolean;
   icon?:      React.ReactNode;
@@ -26,6 +26,8 @@ const variantClass: Record<NonNullable<ButtonProps["variant"]>, string> = {
   crimson:       "btn btn-crimson",
   ghost:         "btn btn-ghost",
   "outline-white": "btn btn-outline-white",
+  "gradient-royal": "btn bg-gradient-to-r from-royal to-royal-mid text-white hover:from-royal-mid hover:to-royal shadow-lg hover:shadow-xl",
+  "gradient-gold": "btn bg-gradient-to-r from-gold to-gold-light text-royal-dark hover:from-gold-light hover:to-gold shadow-lg hover:shadow-xl",
 };
 
 const sizeClass: Record<NonNullable<ButtonProps["size"]>, string> = {
@@ -63,17 +65,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cls}
         disabled={disabled || isLoading}
         onClick={onClick}
-        whileHover={!(disabled || isLoading) ? { scale: 1.02 } : {}}
+        whileHover={!(disabled || isLoading) ? { scale: 1.02, y: -1 } : {}}
         whileTap={!(disabled || isLoading) ? { scale: 0.97 } : {}}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
       >
         {isLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
         ) : (
-          icon && <span className="shrink-0">{icon}</span>
+          icon && <span className="shrink-0 mr-2">{icon}</span>
         )}
-        {children}
-        {!isLoading && iconRight && <span className="shrink-0">{iconRight}</span>}
+        <span className="relative z-10">{children}</span>
+        {!isLoading && iconRight && <span className="shrink-0 ml-2">{iconRight}</span>}
       </motion.button>
     );
   }

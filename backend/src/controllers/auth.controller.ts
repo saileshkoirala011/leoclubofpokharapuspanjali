@@ -17,16 +17,19 @@ function setAuthCookies(res: Response, accessToken: string, refreshToken: string
     ...COOKIE_OPTIONS,
     maxAge: ACCESS_TTL_MS,
   });
+  // Refresh token cookie path must be "/" so the browser sends it
+  // on all requests — the Axios proxy rewrites /auth/refresh → /api/auth/refresh,
+  // meaning a path of "/api/auth/refresh" would never match from the client.
   res.cookie(AUTH_COOKIES.REFRESH_TOKEN, refreshToken, {
     ...COOKIE_OPTIONS,
-    maxAge:   REFRESH_TTL_MS,
-    path:     "/api/auth/refresh",
+    maxAge: REFRESH_TTL_MS,
+    path:   "/",
   });
 }
 
 function clearAuthCookies(res: Response): void {
   res.cookie(AUTH_COOKIES.ACCESS_TOKEN,  "", { ...COOKIE_OPTIONS, expires: new Date(0) });
-  res.cookie(AUTH_COOKIES.REFRESH_TOKEN, "", { ...COOKIE_OPTIONS, expires: new Date(0), path: "/api/auth/refresh" });
+  res.cookie(AUTH_COOKIES.REFRESH_TOKEN, "", { ...COOKIE_OPTIONS, expires: new Date(0), path: "/" });
 }
 
 // ── Controllers ───────────────────────────────────────────────────────────────

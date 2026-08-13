@@ -19,78 +19,78 @@ export default function Leader({
   const rightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = rightRef.current; if (!el) return;
+    const el = rightRef.current;
+    if (!el) return;
     const obs = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) { el.classList.add("visible"); obs.disconnect(); } },
-      { threshold: 0.15 }
+      { threshold: 0.12 }
     );
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
 
   return (
-    <section className="overflow-hidden" style={{
-      background: "linear-gradient(135deg, #0d2657 0%, #1a3a6b 60%, #1e4587 100%)"
-    }}>
-      {/* Sky accent line at top */}
-      <div className="h-1" style={{ background: "linear-gradient(90deg, #87CEEB, #B8E4F7, #87CEEB)" }} />
+    <section className="py-20 lg:py-0 overflow-hidden bg-hero-gradient">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 items-stretch">
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2">
+        {/* Left — portrait */}
+        <div className="relative min-h-[380px] lg:min-h-[580px]">
+          <Image
+            src="/images/dayasagarparajuli.jpg"
+            alt={name} fill
+            className="object-cover object-top"
+            sizes="50vw"
+          />
+          <div className="absolute inset-0 hidden lg:block"
+            style={{ background: "linear-gradient(to right, transparent 60%, rgba(13,33,70,0.95))" }} />
+          <div className="absolute inset-0 lg:hidden"
+            style={{ background: "linear-gradient(to top, rgba(13,33,70,0.9), transparent 60%)" }} />
 
-        {/* Left: full-bleed image */}
-        <div className="relative min-h-[440px] lg:min-h-[580px]">
-          <Image src="/images/dayasagarparajuli.jpg" alt={name} fill
-            className="object-cover object-top" sizes="50vw" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-royal-deep/70 hidden lg:block" />
-          <div className="absolute inset-0 bg-gradient-to-t from-royal-deep/70 to-transparent lg:hidden" />
-
-          {/* Floating badge — Nepal flag inspired */}
-          <div className="absolute bottom-6 left-6 glass rounded-2xl px-4 py-3 shadow-sky"
-            style={{ border: "1.5px solid rgba(135,206,235,0.3)" }}>
-            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-royal/50 mb-0.5">Est.</p>
-            <p className="font-display text-xl font-black leading-none" style={{ color: "#E8A000" }}>2022</p>
+          {/* Est badge */}
+          <div
+            className="absolute bottom-6 left-6 rounded-2xl px-4 py-3 text-center"
+            style={{ background: "linear-gradient(135deg,#1B3A6B,#2D5FAA)", boxShadow: "0 8px 24px rgba(27,58,107,0.5)" }}
+          >
+            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-sky-200/70 mb-0.5">Est.</p>
+            <p className="font-display text-xl font-black text-white leading-none">2022</p>
           </div>
         </div>
 
-        {/* Right: quote + attribution */}
-        <div ref={rightRef} className="fade-up flex flex-col justify-center px-8 sm:px-14 py-16 lg:py-24">
+        {/* Right — quote */}
+        <div
+          ref={rightRef}
+          className="reveal flex flex-col justify-center px-8 sm:px-12 lg:px-14 py-14 lg:py-20 bg-hero-gradient"
+        >
+          <span className="chip mb-6" style={{ background: "rgba(135,206,235,0.15)", border: "1px solid rgba(135,206,235,0.3)", color: "#87CEEB" }}>
+            From Our Founder
+          </span>
 
-          {/* Lotus icon — from logo */}
-          <div className="text-4xl mb-6 opacity-50">🪷</div>
-
-          <span className="section-pill-light mb-6">From Our Founder</span>
-
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.15] tracking-tight mb-8 mt-4">
-            {title}
-          </h2>
-
-          <p className="text-white/50 text-base leading-relaxed mb-12 max-w-lg">{description}</p>
-
-          {/* Sky divider */}
-          <div className="flex items-center gap-3 mb-10 max-w-xs">
-            <div className="h-px flex-1" style={{ background: "linear-gradient(90deg, #87CEEB, transparent)" }} />
-            <span className="w-2 h-2 rounded-full" style={{ background: "#87CEEB" }} />
-            <div className="h-px flex-1" style={{ background: "linear-gradient(270deg, #87CEEB, transparent)" }} />
+          {/* Quote mark */}
+          <div className="font-display text-8xl font-black leading-none mb-3 select-none"
+            style={{ background: "linear-gradient(135deg,#87CEEB,#4A7FD4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", opacity: 0.4 }}>
+            &ldquo;
           </div>
+
+          <h2 className="font-display text-2xl sm:text-3xl font-black text-white leading-[1.2] mb-6">{title}</h2>
+          <p className="text-white/50 text-[15px] leading-relaxed mb-10 max-w-md">{description}</p>
+
+          <div className="h-px bg-white/10 mb-8" />
 
           {/* Attribution */}
           <div className="flex items-center gap-4">
-            <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0"
-              style={{ boxShadow: "0 0 0 2px rgba(135,206,235,0.5), 0 4px 16px rgba(0,0,0,0.3)" }}>
+            <div
+              className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0"
+              style={{ border: "2px solid rgba(135,206,235,0.4)", boxShadow: "0 4px 16px rgba(135,206,235,0.3)" }}
+            >
               <Image src="/images/dayasagarparajuli.jpg" alt={name} fill className="object-cover object-top" />
             </div>
             <div>
-              <p className="text-white font-bold text-sm font-display">{name}</p>
-              <p className="text-[10px] uppercase tracking-[0.15em] font-semibold mt-0.5" style={{ color: "#87CEEB" }}>
-                {subtitle}
-              </p>
+              <p className="font-display font-bold text-white text-sm">{name}</p>
+              <p className="text-[11px] font-semibold text-sky-300 mt-0.5">{subtitle}</p>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Sky accent line at bottom */}
-      <div className="h-1" style={{ background: "linear-gradient(90deg, #87CEEB, #B8E4F7, #87CEEB)" }} />
     </section>
   );
 }

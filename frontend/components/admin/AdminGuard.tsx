@@ -21,11 +21,13 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a1628]">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "var(--bg)" }}>
         <div
-          className="w-10 h-10 border-4 border-[#c9a84c] border-t-transparent rounded-full animate-spin"
+          className="w-10 h-10 rounded-full border-4 animate-spin"
+          style={{ borderColor: "#D6EAF8", borderTopColor: "#1B3A6B" }}
           aria-label="Loading session…"
         />
+        <p className="text-sm font-semibold" style={{ color: "#64748B" }}>Verifying access…</p>
       </div>
     );
   }

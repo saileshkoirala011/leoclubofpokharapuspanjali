@@ -1,46 +1,67 @@
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowLeft, MessageCircle } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center px-5 overflow-hidden relative">
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage: "linear-gradient(rgba(201,168,76,1) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,1) 1px,transparent 1px)",
-          backgroundSize: "80px 80px",
-        }}
-      />
-      <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-[#c9a84c]/8 rounded-full blur-[100px] pointer-events-none" />
+    <div className="min-h-screen flex items-center justify-center px-5 overflow-hidden relative bg-mesh">
 
-      <div className="relative z-10 text-center max-w-lg">
+      {/* Decorative orbs */}
+      <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(74,127,212,0.12) 0%, transparent 70%)" }} />
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(135,206,235,0.15) 0%, transparent 70%)" }} />
+
+      <div className="relative z-10 text-center max-w-md">
+
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <div className="w-20 h-20 rounded-2xl bg-[#EBF3FF] flex items-center justify-center shadow-card">
+            <Image src="/images/logo.png" alt="Leo Club" width={52} height={52} className="rounded-xl" />
+          </div>
+        </div>
+
+        {/* 404 */}
         <div
-          className="font-display font-black leading-none select-none mb-6"
+          className="font-display font-black leading-none select-none mb-4"
           style={{
-            fontSize: "clamp(7rem, 25vw, 14rem)",
-            background: "linear-gradient(135deg, rgba(201,168,76,0.15) 0%, rgba(201,168,76,0.05) 100%)",
+            fontSize: "clamp(5rem, 20vw, 10rem)",
+            background: "linear-gradient(135deg, #1B3A6B 0%, #4A7FD4 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
+            opacity: 0.18,
           }}
         >
           404
         </div>
 
-        <div className="flex items-center justify-center gap-3 mb-8 -mt-4">
-          <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#c9a84c]/40" />
-          <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />
-          <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#c9a84c]/40" />
+        {/* Divider */}
+        <div className="flex items-center justify-center gap-3 mb-8 -mt-6">
+          <div className="h-px w-12 bg-[#D6EAF8]" />
+          <div className="w-2 h-2 rounded-full bg-[#4A7FD4]" />
+          <div className="h-px w-12 bg-[#D6EAF8]" />
         </div>
 
-        <h1 className="font-display text-2xl sm:text-3xl font-black text-white mb-3">Page Not Found</h1>
-        <p className="text-white/40 text-sm sm:text-base leading-relaxed mb-10">
-          The page you&apos;re looking for doesn&apos;t exist or may have been moved.
+        {/* Text */}
+        <span className="chip chip-blue mb-5">Page Not Found</span>
+        <h1 className="font-display text-2xl sm:text-3xl font-black text-[#1E293B] mt-4 mb-3">
+          Oops! We lost this page.
+        </h1>
+        <p className="text-[#64748B] text-base leading-relaxed mb-10">
+          The page you&apos;re looking for doesn&apos;t exist or may have been moved. Let&apos;s get you back on track.
         </p>
 
+        {/* CTAs */}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link href="/" className="btn-gold">← Back to Home</Link>
-          <Link href="/contact" className="btn-outline-white">Contact Us</Link>
+          <Link href="/" className="btn btn-primary">
+            <ArrowLeft size={16} strokeWidth={2.5} />
+            Back to Home
+          </Link>
+          <Link href="/contact" className="btn btn-ghost">
+            <MessageCircle size={16} strokeWidth={2} />
+            Contact Us
+          </Link>
         </div>
       </div>
     </div>

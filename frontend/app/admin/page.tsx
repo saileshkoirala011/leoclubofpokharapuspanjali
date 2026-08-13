@@ -1,38 +1,23 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import Image       from "next/image";
-import AdminGuard  from "@/components/admin/AdminGuard";
+import Image from "next/image";
+import { Mail, FileText, BookMarked, LayoutGrid, RefreshCw, LogOut } from "lucide-react";
+import AdminGuard from "@/components/admin/AdminGuard";
 import { useAuth } from "@/context/AuthContext";
 import { fetchContacts, deleteContact } from "@/lib/api";
+import type { Contact, Pagination } from "@/types";
 
-/* ── Types ── */
-interface Contact {
-  _id:       string;
-  name:      string;
-  email:     string;
-  subject:   string;
-  message:   string;
-  createdAt: string;
-}
-interface Pagination { total: number; page: number; limit: number; pages: number; }
-
-/* ── Helpers ── */
 const fmt = (d: string) =>
   new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
-/* ── Sub-components ── */
-const Stat = ({ label, value, icon }: { label: string; value: number | undefined; icon: string }) => (
-  <div className="bg-[#05101f] rounded-2xl border border-white/5 p-5 flex items-center gap-4">
-    <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style={{ background: "rgba(201,168,76,0.12)" }}>{icon}</div>
-    <div>
-      <p className="text-white/35 text-[10px] font-bold uppercase tracking-[0.15em]">{label}</p>
-      <p className="font-display text-2xl font-black text-[#c9a84c] mt-0.5">{value ?? "—"}</p>
-    </div>
-  </div>
-);
+const STATS_CFG = [
+  { key: "total",   label: "Total Messages", Icon: Mail,       color: "#1B3A6B", bg: "bg-[#EBF3FF]" },
+  { key: "onPage",  label: "On This Page",   Icon: FileText,   color: "#5BB8E8", bg: "bg-[#EBF5FB]" },
+  { key: "page",    label: "Current Page",   Icon: BookMarked, color: "#D4A017", bg: "bg-[#FEF9EC]" },
+  { key: "pages",   label: "Total Pages",    Icon: LayoutGrid, color: "#2D9348", bg: "bg-[#ECFDF5]" },
+] as const;
 
-/* ── Main dashboard ── */
 function Dashboard() {
   const { user, logout } = useAuth();
   const [contacts,   setContacts]   = useState<Contact[]>([]);
@@ -43,17 +28,14 @@ function Dashboard() {
   const [expanded,   setExpanded]   = useState<string | null>(null);
 
   const load = useCallback(async (p: number) => {
-    setLoading(true);
-    setError("");
+    setLoading(true); setError("");
     try {
       const data = await fetchContacts(p);
       setContacts(data.contacts as Contact[]);
       setPagination(data.pagination);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load contacts.");
-    } finally {
-      setLoading(false);
-    }
+      setError(err instanceof Error ? err.message : "Failed to load.");
+    } finally { setLoading(false); }
   }, []);
 
   useEffect(() => { load(page); }, [load, page]);
@@ -64,120 +46,150 @@ function Dashboard() {
     load(page);
   };
 
+  const statsVals = {
+    total:  pagination?.total,
+    onPage: contacts.length,
+    page:   pagination?.page,
+    pages:  pagination?.pages,
+  };
+
   return (
-    <div className="min-h-screen bg-[#0a1628]">
+    <div className="min-h-screen" style={{ background: "var(--bg)" }}>
+
       {/* Top bar */}
-      <header className="sticky top-0 z-20 bg-[#0a1628]/95 backdrop-blur-xl border-b border-white/5 h-16 flex items-center px-5 sm:px-8 gap-4">
+      <header className="sticky top-0 z-20 bg-white border-b border-[#D6EAF8] h-16 flex items-center px-5 sm:px-8 gap-4"
+        style={{ boxShadow: "0 1px 8px rgba(30,64,175,0.07)" }}>
         <div className="flex items-center gap-3">
-          <Image src="/images/logo.png" alt="Leo Club" width={28} height={28} className="brightness-0 invert opacity-70" />
-          <span className="font-display font-bold text-white text-sm hidden sm:block">LCP Admin</span>
+          <Image src="/images/logo.png" alt="Leo Club" width={32} height={32} className="rounded-xl" />
+          <div className="hidden sm:block">
+            <div className="font-display font-bold text-[#1B3A6B] text-sm leading-none">LCP Admin</div>
+            <div className="text-[10px] text-[#64748B] mt-0.5">Dashboard</div>
+          </div>
         </div>
         <div className="flex-1" />
-        <span className="hidden sm:block text-xs text-white/30 truncate max-w-[200px]">{user?.email}</span>
+        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#F0F6FF] rounded-full">
+          <div className="w-6 h-6 rounded-full bg-[#1B3A6B] text-white flex items-center justify-center text-[10px] font-bold">
+            {user?.name?.[0]?.toUpperCase() ?? "A"}
+          </div>
+          <span className="text-xs text-[#1B3A6B] font-semibold truncate max-w-[160px]">{user?.email}</span>
+        </div>
         <button
           onClick={async () => { await logout(); window.location.href = "/admin/login"; }}
-          className="text-xs font-semibold text-red-400 hover:text-red-300 px-3 py-1.5 rounded-lg hover:bg-red-900/20 transition-colors"
+          className="btn btn-crimson btn-sm"
         >
+          <LogOut size={14} strokeWidth={2} />
           Sign Out
         </button>
       </header>
 
-      <div className="p-5 sm:p-8">
+      <div className="max-w-7xl mx-auto p-5 sm:p-8">
+
         {/* Welcome */}
         <div className="mb-8">
-          <h1 className="font-display text-2xl font-black text-white">Dashboard</h1>
-          <p className="text-white/30 text-sm mt-1">
-            Welcome back, <span className="text-[#c9a84c] font-semibold">{user?.name ?? "Admin"}</span>
+          <h1 className="font-display text-2xl font-black text-[#1E293B]">Dashboard</h1>
+          <p className="text-[#64748B] text-sm mt-1">
+            Welcome back, <span className="text-[#1B3A6B] font-bold">{user?.name ?? "Admin"}</span>
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <Stat label="Total Messages" value={pagination?.total}  icon="✉️"  />
-          <Stat label="This Page"      value={contacts.length}    icon="📄"  />
-          <Stat label="Current Page"   value={pagination?.page}   icon="📍"  />
-          <Stat label="Total Pages"    value={pagination?.pages}  icon="📚"  />
+          {STATS_CFG.map(({ key, label, Icon, color, bg }) => (
+            <div key={key} className={`${bg} rounded-2xl p-5 flex items-center gap-3 border border-[#D6EAF8]`}>
+              <div className="w-10 h-10 rounded-xl bg-white/60 flex items-center justify-center flex-shrink-0">
+                <Icon size={18} style={{ color }} strokeWidth={2} />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#64748B]">{label}</p>
+                <p className="font-display text-2xl font-black mt-0.5" style={{ color }}>
+                  {statsVals[key as keyof typeof statsVals] ?? "—"}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Table */}
-        <div className="bg-[#05101f] rounded-2xl border border-white/5 overflow-hidden">
-          <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+        {/* Table card */}
+        <div className="bg-white rounded-2xl border border-[#D6EAF8] overflow-hidden"
+          style={{ boxShadow: "0 2px 16px rgba(30,64,175,0.08)" }}>
+
+          <div className="px-6 py-4 border-b border-[#D6EAF8] flex items-center justify-between">
             <div>
-              <h2 className="font-display font-bold text-white text-sm">Contact Submissions</h2>
-              <p className="text-white/25 text-xs mt-0.5">{pagination?.total ?? 0} total messages</p>
+              <h2 className="font-display font-bold text-[#1E293B] text-base">Contact Submissions</h2>
+              <p className="text-[#64748B] text-xs mt-0.5">{pagination?.total ?? 0} total messages</p>
             </div>
-            <button onClick={() => load(page)}
-              className="flex items-center gap-1.5 text-xs font-semibold text-white/35 hover:text-[#c9a84c] transition-colors">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
+            <button onClick={() => load(page)} className="btn btn-ghost btn-sm gap-1.5 text-xs">
+              <RefreshCw size={13} strokeWidth={2.5} />
               Refresh
             </button>
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center py-20 gap-2 text-white/30">
-              <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-              </svg>
+            <div className="flex items-center justify-center py-20 gap-3 text-[#64748B]">
+              <div className="w-6 h-6 rounded-full border-3 border-[#D6EAF8] border-t-[#1B3A6B] animate-spin" />
               <span className="text-sm">Loading…</span>
             </div>
           ) : error ? (
             <div className="p-6 flex items-center justify-between">
-              <p className="text-red-400 text-sm">{error}</p>
-              <button onClick={() => load(page)} className="text-xs text-red-400 underline">Retry</button>
+              <p className="text-red-500 text-sm">{error}</p>
+              <button onClick={() => load(page)} className="btn btn-crimson btn-sm">Retry</button>
             </div>
           ) : contacts.length === 0 ? (
-            <div className="py-20 text-center text-white/25 text-sm">No contact submissions yet.</div>
+            <div className="py-20 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-[#EBF3FF] flex items-center justify-center mx-auto mb-4">
+                <Mail size={28} className="text-[#1B3A6B]" strokeWidth={1.5} />
+              </div>
+              <p className="text-[#64748B] text-sm">No contact submissions yet.</p>
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/5">
-                    {["Sender", "Subject", "Date", "Actions"].map((h) => (
-                      <th key={h} className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-[0.15em] text-white/25">{h}</th>
+                <thead className="bg-[#F8FAFC]">
+                  <tr className="border-b border-[#D6EAF8]">
+                    {["Sender", "Subject", "Date", "Actions"].map(h => (
+                      <th key={h} className="px-5 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.12em] text-[#64748B]">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {contacts.map((c) => (
+                  {contacts.map(c => (
                     <React.Fragment key={c._id}>
-                      <tr className="border-b border-white/5 hover:bg-white/2 transition-colors">
+                      <tr className="border-b border-[#D6EAF8] hover:bg-[#F8FAFC] transition-colors">
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-[#c9a84c]/15 text-[#c9a84c] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                            <div className="w-9 h-9 rounded-full bg-[#EBF3FF] text-[#1B3A6B] flex items-center justify-center font-bold text-xs flex-shrink-0">
                               {c.name?.[0]?.toUpperCase() ?? "?"}
                             </div>
                             <div className="min-w-0">
-                              <p className="text-white text-sm font-semibold truncate">{c.name}</p>
-                              <p className="text-white/35 text-xs truncate">{c.email}</p>
+                              <p className="text-[#1E293B] text-sm font-semibold truncate">{c.name}</p>
+                              <p className="text-[#64748B] text-xs truncate">{c.email}</p>
                             </div>
                           </div>
                         </td>
                         <td className="px-5 py-4 hidden sm:table-cell">
-                          <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#c9a84c]/10 text-[#c9a84c] max-w-[160px] truncate">
+                          <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-[#EBF3FF] text-[#1B3A6B] max-w-[160px] truncate">
                             {c.subject}
                           </span>
                         </td>
-                        <td className="px-5 py-4 hidden lg:table-cell text-white/35 text-xs whitespace-nowrap">{fmt(c.createdAt)}</td>
+                        <td className="px-5 py-4 hidden lg:table-cell text-[#64748B] text-xs whitespace-nowrap">{fmt(c.createdAt)}</td>
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-2">
-                            <button onClick={() => setExpanded((v) => v === c._id ? null : c._id)}
-                              className="text-xs font-semibold text-white/40 hover:text-[#c9a84c] transition-colors">
+                            <button onClick={() => setExpanded(v => v === c._id ? null : c._id)}
+                              className="text-xs font-semibold text-[#1B3A6B] hover:underline">
                               {expanded === c._id ? "Hide" : "View"}
                             </button>
                             <button onClick={() => handleDelete(c._id)}
-                              className="text-xs font-semibold text-red-400/60 hover:text-red-400 transition-colors">
+                              className="text-xs font-semibold text-red-400 hover:text-red-600">
                               Delete
                             </button>
                           </div>
                         </td>
                       </tr>
                       {expanded === c._id && (
-                        <tr className="border-b border-white/5 bg-white/2">
-                          <td colSpan={4} className="px-5 pb-4 pt-0">
-                            <div className="bg-white/4 rounded-xl border border-white/8 p-4 text-sm text-white/55 leading-relaxed whitespace-pre-wrap ml-11">
+                        <tr className="border-b border-[#D6EAF8] bg-[#F8FAFC]">
+                          <td colSpan={4} className="px-5 pb-4 pt-1">
+                            <div className="bg-white rounded-xl border border-[#D6EAF8] p-4 text-sm text-[#64748B] leading-relaxed whitespace-pre-wrap ml-12"
+                              style={{ boxShadow: "0 1px 6px rgba(30,64,175,0.05)" }}>
                               {c.message}
                             </div>
                           </td>
@@ -190,16 +202,15 @@ function Dashboard() {
             </div>
           )}
 
-          {/* Pagination */}
           {pagination && pagination.pages > 1 && (
-            <div className="px-6 py-4 border-t border-white/5 flex items-center justify-between">
-              <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1}
-                className="text-xs font-semibold text-white/35 hover:text-[#c9a84c] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+            <div className="px-6 py-4 border-t border-[#D6EAF8] flex items-center justify-between">
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
+                className="btn btn-ghost btn-sm disabled:opacity-40">
                 ← Previous
               </button>
-              <span className="text-xs text-white/25">Page {pagination.page} of {pagination.pages}</span>
-              <button onClick={() => setPage((p) => Math.min(pagination.pages, p + 1))} disabled={page >= pagination.pages}
-                className="text-xs font-semibold text-white/35 hover:text-[#c9a84c] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+              <span className="text-xs text-[#64748B]">Page {pagination.page} of {pagination.pages}</span>
+              <button onClick={() => setPage(p => Math.min(pagination.pages, p + 1))} disabled={page >= pagination.pages}
+                className="btn btn-ghost btn-sm disabled:opacity-40">
                 Next →
               </button>
             </div>
@@ -211,9 +222,5 @@ function Dashboard() {
 }
 
 export default function AdminPage() {
-  return (
-    <AdminGuard>
-      <Dashboard />
-    </AdminGuard>
-  );
+  return <AdminGuard><Dashboard /></AdminGuard>;
 }

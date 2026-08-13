@@ -1,9 +1,7 @@
 import { userRepository } from "../repositories/user.repository.js";
 import { jwtService }    from "./jwt.service.js";
 import { emailService }  from "./email.service.js";
-import { getRedis }      from "../config/redis.js";
 import { env }           from "../config/env.js";
-import { REDIS_KEYS }    from "../constants/auth.constants.js";
 import { ROLE_PERMISSIONS } from "../constants/roles.constants.js";
 import { ApiError }      from "../utils/ApiError.js";
 import { generateSecureToken, hashToken } from "../utils/crypto.js";

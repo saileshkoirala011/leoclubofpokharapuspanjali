@@ -6,8 +6,8 @@ import mongoSanitize    from "express-mongo-sanitize";
 import hpp              from "hpp";
 
 import { env }           from "./config/env.js";
-import { connectDB }     from "./config/database.js";
-import { disconnectRedis } from "./config/redis.js";
+import { connectDB, isDBConnected } from "./config/database.js";
+import { disconnectRedis, isRedisAvailable } from "./config/redis.js";
 import { logger }        from "./utils/logger.js";
 
 import { requestLogger } from "./middleware/requestLogger.js";
@@ -38,6 +38,8 @@ app.use(
     origin: (origin, cb) => {
       const allowed = [
         env.FRONTEND_URL,
+        "https://leoclubofpokharapuspanjali.app",
+        "https://www.leoclubofpokharapuspanjali.app",
         "http://localhost:3000",
         "http://localhost:3001",
         "http://127.0.0.1:3000",
@@ -72,6 +74,20 @@ app.use(apiLimiter);
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get("/", (_req, res) => {
   res.json({ success: true, message: "Leo Club Auth API is running", env: env.NODE_ENV });
+});
+
+app.get("/health", (_req, res) => {
+  const db    = isDBConnected();
+  const redis = isRedisAvailable();
+  const healthy = db; // Redis is optional — DB is the critical dependency
+  res.status(healthy ? 200 : 503).json({
+    success: healthy,
+    status:  healthy ? "healthy" : "degraded",
+    db:      db    ? "connected"    : "disconnected",
+    redis:   redis ? "connected"    : "unavailable",
+    uptime:  Math.floor(process.uptime()),
+    ts:      new Date().toISOString(),
+  });
 });
 
 // ── API routes ────────────────────────────────────────────────────────────────
