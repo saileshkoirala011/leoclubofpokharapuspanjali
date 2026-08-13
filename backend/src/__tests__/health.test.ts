@@ -1,12 +1,19 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterAll } from "vitest";
 import request from "supertest";
 import app from "../app.js";
 
 /**
  * Health-check smoke tests.
- * These run in CI against a real Express app instance — no external
- * dependencies required beyond the test env-vars already set in ci.yml.
+ * The app module is imported WITHOUT starting the HTTP server
+ * (start() is only called when app.ts is run directly).
+ * Supertest creates its own ephemeral server for each test.
  */
+
+afterAll(async () => {
+  // Give any pending async operations a moment to settle
+  await new Promise(r => setTimeout(r, 100));
+});
+
 describe("GET /", () => {
   it("returns 200 with success flag", async () => {
     const res = await request(app).get("/");
@@ -17,9 +24,9 @@ describe("GET /", () => {
 });
 
 describe("GET /health", () => {
-  it("returns a health object", async () => {
+  it("returns a health object with required fields", async () => {
     const res = await request(app).get("/health");
-    // May be 200 (healthy) or 503 (db not ready in CI) — both are valid responses
+    // 200 = healthy, 503 = degraded (db not yet connected in CI) — both valid
     expect([200, 503]).toContain(res.status);
     expect(res.body).toHaveProperty("db");
     expect(res.body).toHaveProperty("uptime");
@@ -32,12 +39,13 @@ describe("GET /api", () => {
     const res = await request(app).get("/api");
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
+    expect(res.body.message).toMatch(/Leo Club/i);
   });
 });
 
 describe("404 handler", () => {
   it("returns 404 for unknown routes", async () => {
-    const res = await request(app).get("/this-route-does-not-exist");
+    const res = await request(app).get("/this-route-does-not-exist-xyz");
     expect(res.status).toBe(404);
   });
 });

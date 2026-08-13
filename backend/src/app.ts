@@ -22,9 +22,7 @@ import routes            from "./routes/index.js";
 const app = express();
 
 app.disable("x-powered-by");
-if (env.NODE_ENV === "production") app.set("trust proxy", 1);
-
-// ── Security headers ──────────────────────────────────────────────────────────
+if (env.NODE_ENV === "production") app.set("trust proxy", 1);// ── Security headers ──────────────────────────────────────────────────────────
 app.use(
   helmet({
     contentSecurityPolicy:      false,
@@ -97,7 +95,7 @@ app.use("/api", routes);
 app.use(notFound);
 app.use(errorHandler);
 
-// ── Bootstrap ─────────────────────────────────────────────────────────────────
+// ── Bootstrap (only when run directly, not when imported by tests) ────────────
 
 const PORT = env.PORT;
 
@@ -108,7 +106,6 @@ async function start(): Promise<void> {
     logger.info(`Server running on port ${PORT} [${env.NODE_ENV}]`);
   });
 
-  // ── Graceful shutdown ───────────────────────────────────────────────────────
   const shutdown = async (signal: string): Promise<void> => {
     logger.info(`${signal} received — shutting down`);
     server.close(async () => {
@@ -116,7 +113,6 @@ async function start(): Promise<void> {
       logger.info("Server closed");
       process.exit(0);
     });
-    // Force exit after 10 s
     setTimeout(() => process.exit(1), 10_000).unref();
   };
 
@@ -124,9 +120,15 @@ async function start(): Promise<void> {
   process.on("SIGINT",  () => shutdown("SIGINT"));
 }
 
-start().catch((err) => {
-  logger.error({ err }, "Failed to start server");
-  process.exit(1);
-});
+// Only start the server when this file is executed directly (not imported by tests)
+const isMain = process.argv[1]?.endsWith("app.js") ||
+               process.argv[1]?.endsWith("app.ts");
+
+if (isMain) {
+  start().catch((err) => {
+    logger.error({ err }, "Failed to start server");
+    process.exit(1);
+  });
+}
 
 export default app;
