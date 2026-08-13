@@ -50,6 +50,9 @@ frontend/test-results/
 # ── TypeScript ────────────────────────────────────────────────────────────────
 *.tsbuildinfo
 
-# ── Root-level package files (stray npm installs) ─────────────────────────────
+# ── Root-level stray files (accidental npm installs at repo root) ─────────────
 /package.json
 /package-lock.json
+/node_modules/
+/dist/
+/.vite/

@@ -10,8 +10,6 @@ jobs:
     name: Deploy Frontend → Vercel
     runs-on: ubuntu-latest
     environment: production
-    # Skip if the required secrets are not configured yet
-    if: ${{ secrets.VERCEL_TOKEN != '' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -30,14 +28,14 @@ jobs:
           VERCEL_ORG_ID:     ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Build project
+      - name: Build project artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: frontend
         env:
           VERCEL_ORG_ID:     ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Deploy to Vercel (production)
+      - name: Deploy prebuilt artifacts
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: frontend
         env:
@@ -50,10 +48,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: deploy-frontend
-    if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
 
     steps:
       - name: Trigger Render deploy hook
+        if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
         run: |
           curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" \
             --fail --silent --show-error
