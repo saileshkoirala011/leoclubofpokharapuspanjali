@@ -1,42 +1,55 @@
-# Dependencies
+# ── Dependencies ─────────────────────────────────────────────────────────────
 node_modules/
 frontend/node_modules/
 backend/node_modules/
 
-# Build outputs
+# ── Build outputs ─────────────────────────────────────────────────────────────
 dist/
 frontend/dist/
 frontend/.next/
 frontend/build/
 backend/dist/
 
-# Environment files
+# ── Environment files (NEVER commit these) ────────────────────────────────────
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
 backend/.env
 frontend/.env.local
+frontend/.env.production.local
 
-# Logs
+# ── Vercel (contains secrets — never commit) ──────────────────────────────────
+.vercel/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pino.log
 
-# OS files
+# ── OS ────────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 
-# IDE
+# ── IDE ───────────────────────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Testing
+# ── Testing ───────────────────────────────────────────────────────────────────
 coverage/
 frontend/coverage/
 backend/coverage/
+frontend/playwright-report/
+frontend/test-results/
 
-# Misc
+# ── TypeScript ────────────────────────────────────────────────────────────────
 *.tsbuildinfo
+
+# ── Root-level package files (stray npm installs) ─────────────────────────────
+/package.json
+/package-lock.json
