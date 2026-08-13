@@ -23,12 +23,3 @@ export function safeCompare(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 }
-
-/**
- * Generate a short numeric OTP (default 6 digits).
- */
-export function generateOTP(digits = 6): string {
-  const max = Math.pow(10, digits);
-  const otp = crypto.randomInt(0, max);
-  return otp.toString().padStart(digits, "0");
-}

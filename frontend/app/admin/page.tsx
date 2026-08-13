@@ -42,8 +42,12 @@ function Dashboard() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this message?")) return;
-    await deleteContact(id);
-    load(page);
+    try {
+      await deleteContact(id);
+      load(page);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to delete message.");
+    }
   };
 
   const statsVals = {

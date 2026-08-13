@@ -43,11 +43,12 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   # ── Deploy backend to Render ─────────────────────────────────────────────────
+  # Runs independently of frontend — backend changes always deploy regardless
+  # of whether the frontend deploy succeeded or failed.
   deploy-backend:
     name: Deploy Backend → Render
     runs-on: ubuntu-latest
     environment: production
-    needs: deploy-frontend
 
     steps:
       - name: Trigger Render deploy hook

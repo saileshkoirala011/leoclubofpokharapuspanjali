@@ -9,6 +9,13 @@ import React, {
   useRef,
 } from "react";
 import { API_BASE_URL } from "@/lib/constants";
+
+// ── Runtime guard — fail fast if env var is missing in production ─────────────
+if (typeof window !== "undefined" &&
+    process.env.NODE_ENV === "production" &&
+    !process.env.NEXT_PUBLIC_API_URL) {
+  console.error("[AuthContext] NEXT_PUBLIC_API_URL is not set. API calls will fail.");
+}
 import type { User } from "@/types";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
