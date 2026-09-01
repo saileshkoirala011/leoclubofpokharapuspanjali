@@ -1,13 +1,8 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
-  // Points Next.js to the monorepo root so it doesn't get confused
-  // by a lockfile in a parent directory (C:\Users\Saile on Windows).
-  outputFileTracingRoot: path.join(__dirname, "../../"),
-
   images: {
     remotePatterns: [],
   },
