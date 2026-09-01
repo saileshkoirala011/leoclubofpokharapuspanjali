@@ -15,18 +15,27 @@ const factory: (...args: any[]) => any =
 /**
  * HTTP request / response logger middleware.
  * Attaches a unique requestId to every request for tracing.
+ * On authenticated routes, also attaches userId for easier log correlation.
  */
 export const requestLogger = factory({
   logger,
   genReqId: () => randomUUID(),
-  customProps: (req: any) => ({ requestId: req.id }),
+  customProps: (req: any) => ({
+    requestId: req.id,
+    // req.user is populated by authenticate middleware — may be undefined on public routes
+    userId: req.user?._id?.toString() ?? undefined,
+  }),
   customLogLevel: (_req: any, res: any) => {
     if (res.statusCode >= 500) return "error";
     if (res.statusCode >= 400) return "warn";
     return "info";
   },
   serializers: {
-    req: (req: any) => ({ method: req.method, url: req.url, id: req.id }),
+    req: (req: any) => ({
+      method: req.method,
+      url:    req.url,
+      id:     req.id,
+    }),
     res: (res: any) => ({ statusCode: res.statusCode }),
   },
 });

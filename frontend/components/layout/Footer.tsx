@@ -56,7 +56,7 @@ export default function Footer() {
               <div>
                 <div className="text-sky-200/60 text-[9px] uppercase tracking-[0.2em] font-bold">Leo Club</div>
                 <div className="font-display font-black text-white text-[14px]">
-                  Pokhara <span className="text-[#D4A017]">Puspanjali</span>
+                  Pokhara <span className="text-[#1B3A6U]">Puspanjali</span>
                 </div>
                 <div className="text-white/25 text-[9px] uppercase tracking-[0.15em] mt-0.5">Est. 2022</div>
               </div>

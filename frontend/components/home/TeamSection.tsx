@@ -6,9 +6,9 @@ import { ArrowRight } from "lucide-react";
 import TeamMemberCard from "@/components/ui/TeamMemberCard";
 
 const TEAM = [
-  { name: "LEO Smriti Karki",    role: "President",      image: "/images/Smitri-Karki.jpg", accent: "#C8102E" },
+  { name: "LEO Sailesh Koirala",    role: "President",      image: "/images/Sailesh.jpg", accent: "#C8102E" },
   { name: "LEO Pratik Dhakal",   role: "Vice-President", image: "/images/pratikdhakal.jpg", accent: "#1B3A6B" },
-  { name: "LEO Sailesh Koirala", role: "Secretary",      image: "/images/Sailesh.jpg",      accent: "#D4A017" },
+  { name: "LEO Rajani Sharma",  role: "Secretary",     image: "/images/rajani-sharma.jpg",      accent: "#D4A017" },
 ];
 
 export default function TeamSection() {

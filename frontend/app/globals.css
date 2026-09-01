@@ -1,13 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   LEO CLUB PUSPANJALI — Premium Blue NGO Design System
-   Logo palette: Royal Blue #1B3A6B · Nepal Red #C8102E · Gold #D4A017 · Sky #87CEEB
-═══════════════════════════════════════════════════════════════════════════ */
-
-/* ── CSS custom properties ────────────────────────────────────────────────── */
 :root {
   --royal:           #1B3A6B;
   --royal-dark:      #0D2146;

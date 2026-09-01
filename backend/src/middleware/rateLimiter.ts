@@ -30,3 +30,15 @@ export const resetLimiter = rateLimit({
   legacyHeaders:   false,
   handler,
 });
+
+/**
+ * Contact form — 5 submissions per hour per IP.
+ * Keeps the inbox clean and prevents email spam via the public endpoint.
+ */
+export const contactLimiter = rateLimit({
+  windowMs:        60 * 60 * 1000,
+  max:             5,
+  standardHeaders: true,
+  legacyHeaders:   false,
+  handler,
+});

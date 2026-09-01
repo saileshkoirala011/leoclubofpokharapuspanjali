@@ -12,14 +12,13 @@ let redisAvailable = false;
 export function getRedis(): RedisClient {
   if (!redisClient) {
     redisClient = new RedisClient(env.REDIS_URL, {
-      maxRetriesPerRequest:    null,   // don't throw on retry exhaustion
+      maxRetriesPerRequest:    null,
       enableReadyCheck:        true,
-      lazyConnect:             true,   // don't connect immediately on creation
+      lazyConnect:             true,
       retryStrategy: (times) => {
-        // Back off exponentially, cap at 30 s, give up after 10 attempts
         if (times > 10) {
           logger.warn("Redis: giving up reconnect attempts");
-          return null;                 // returning null stops retrying
+          return null;
         }
         return Math.min(times * 500, 30_000);
       },
@@ -31,7 +30,6 @@ export function getRedis(): RedisClient {
     redisClient.on("close",       ()          => { redisAvailable = false; logger.warn("Redis connection closed"); });
     redisClient.on("reconnecting",()          => { logger.info("Redis reconnecting…"); });
 
-    // Attempt connection — failures are handled by the error event above
     redisClient.connect().catch((err: Error) =>
       logger.warn({ err }, "Redis initial connect failed — running without Redis")
     );
@@ -39,17 +37,6 @@ export function getRedis(): RedisClient {
   return redisClient;
 }
 
-/**
- * isRedisAvailable — safe check before performing Redis operations.
- */
-export function isRedisAvailable(): boolean {
-  return redisAvailable && redisClient?.status === "ready";
-}
-
-/**
- * safeRedis — wraps a Redis operation so it never throws.
- * Returns the fallback value if Redis is down or the operation fails.
- */
 export async function safeRedis<T>(
   operation: (client: RedisClient) => Promise<T>,
   fallback: T,
@@ -61,6 +48,13 @@ export async function safeRedis<T>(
     logger.warn({ err }, "Redis operation failed — using fallback");
     return fallback;
   }
+}
+
+/**
+ * isRedisAvailable — safe check before performing Redis operations.
+ */
+export function isRedisAvailable(): boolean {
+  return redisAvailable && redisClient?.status === "ready";
 }
 
 export async function disconnectRedis(): Promise<void> {

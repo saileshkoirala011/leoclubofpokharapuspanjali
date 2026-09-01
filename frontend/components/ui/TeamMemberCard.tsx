@@ -51,7 +51,7 @@ export default function TeamMemberCard({
       />
 
       {/* ── Photo area ── */}
-      <div className="relative overflow-hidden" style={{ height: "260px" }}>
+      <div className="relative overflow-hidden" style={{ height: "360px" }}>
         <Image
           src={image}
           alt={name}

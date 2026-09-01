@@ -3,12 +3,18 @@ import { z } from "zod";
 
 dotenv.config();
 
+const safeEnv = {
+  MONGODB_URI: process.env.MONGODB_URI || "mongodb://localhost:27017/leoclub_auth",
+  REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
+  FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:3000",
+};
+
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   PORT: z.coerce.number().default(5000),
 
-  MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
-  REDIS_URL: z.string().min(1, "REDIS_URL is required"),
+  MONGODB_URI: z.string().min(1, "MONGODB_URI is required").default(safeEnv.MONGODB_URI),
+  REDIS_URL: z.string().min(1, "REDIS_URL is required").default(safeEnv.REDIS_URL),
 
   JWT_ACCESS_SECRET: z.string().min(32, "JWT_ACCESS_SECRET must be ≥ 32 chars"),
   JWT_REFRESH_SECRET: z.string().min(32, "JWT_REFRESH_SECRET must be ≥ 32 chars"),
@@ -17,7 +23,7 @@ const envSchema = z.object({
 
   CSRF_SECRET: z.string().min(32, "CSRF_SECRET must be ≥ 32 chars"),
 
-  FRONTEND_URL: z.string().url().default("http://localhost:3000"),
+  FRONTEND_URL: z.string().url().default(safeEnv.FRONTEND_URL),
 
   SMTP_HOST: z.string().default("smtp.ethereal.email"),
   SMTP_PORT: z.coerce.number().default(587),

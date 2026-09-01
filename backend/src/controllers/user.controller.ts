@@ -72,8 +72,18 @@ export const assignRole = asyncHandler(async (req: Request, res: Response) => {
   sendSuccess(res, toPublic(updated), "Role assigned");
 });
 
-/** GET /api/admin/users  — alias with stats */
+/** GET /api/admin/users  — paginated list with optional role filter */
 export const adminListUsers = asyncHandler(async (req: Request, res: Response) => {
-  const { users, total } = await userRepository.findAll({}, { page: 1, limit: 100 });
-  sendSuccess(res, { users: users.map(toPublic), total }, "All users retrieved");
+  const page  = Math.max(1,   parseInt(String(req.query["page"]  ?? 1)));
+  const limit = Math.min(100, parseInt(String(req.query["limit"] ?? 20)));
+  const sort  = String(req.query["sort"] ?? "-createdAt");
+  const role  = req.query["role"] as string | undefined;
+
+  const filter = role ? { role } : {};
+  const { users, total } = await userRepository.findAll(filter, { page, limit, sort });
+
+  sendSuccess(res, {
+    users: users.map(toPublic),
+    pagination: { total, page, limit, pages: Math.ceil(total / limit) },
+  }, "All users retrieved");
 });

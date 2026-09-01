@@ -19,11 +19,18 @@ vi.mock("../../src/config/redis.js", () => {
     srem:     vi.fn(() => Promise.resolve(1)),
     smembers: vi.fn((k: string) => Promise.resolve([...(sets.get(k) ?? [])])),
     expire:   vi.fn(() => Promise.resolve(1)),
+    ping:     vi.fn().mockResolvedValue("PONG"),
     pipeline: vi.fn(() => ({ del: vi.fn().mockReturnThis(), exec: vi.fn().mockResolvedValue([]) })),
     quit:     vi.fn().mockResolvedValue(undefined),
     _store: store,
   };
-  return { getRedis: vi.fn(() => redis), disconnectRedis: vi.fn() };
+  return {
+    getRedis: vi.fn(() => redis),
+    safeRedis: vi.fn(async (operation: (client: typeof redis) => Promise<unknown>, fallback: unknown) => {
+      try { return await operation(redis); } catch { return fallback; }
+    }),
+    disconnectRedis: vi.fn(),
+  };
 });
 
 vi.mock("../../src/config/env.js", () => ({

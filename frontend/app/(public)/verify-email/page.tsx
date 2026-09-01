@@ -51,7 +51,7 @@ function VerifyContent() {
           </div>
           <h1 className="font-display text-2xl font-black text-white mb-3">Email Verified!</h1>
           <p className="text-white/45 text-sm mb-8">{message}</p>
-          <Link href="/" className="btn-gold">Go to Home</Link>
+          <Link href="/" className="btn btn-gold">Go to Home</Link>
         </>
       )}
 

@@ -89,7 +89,10 @@ export default function ContactPage() {
       setErrors({});
     } catch (err: unknown) {
       setStatus("error");
-      setErrMsg(err instanceof Error ? err.message : "Failed to send. Please try again.");
+      // Extract the server's error message if available (axios wraps it in response.data)
+      const axiosMsg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setErrMsg(axiosMsg ?? (err instanceof Error ? err.message : "Failed to send. Please try again."));
     }
   };
 

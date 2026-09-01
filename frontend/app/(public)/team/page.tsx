@@ -2,33 +2,32 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import PageHero       from "@/components/ui/PageHero";
+import PageHero from "@/components/ui/PageHero";
 import TeamMemberCard from "@/components/ui/TeamMemberCard";
 
 export const metadata: Metadata = {
-  title:       "Our Team | Leo Club of Pokhara Puspanjali",
+  title: "Our Team | Leo Club of Pokhara Puspanjali",
   description: "Meet the passionate young leaders driving positive change in Pokhara.",
 };
 
 const TEAM = [
-  { name: "LEO Dayasagar Parajuli",  role: "Charter President",       image: "/images/dayasagarparajuli.jpg", badge: "Founder",    accent: "#1B3A6B" },
-  { name: "LEO Sadhana Poudel",      role: "Immediate Past President", image: "/images/sandhya.jpg",          badge: "Leadership", accent: "#2D5FAA" },
-  { name: "LEO Smriti Karki",        role: "President",                image: "/images/Smitri-Karki.jpg",     badge: "President",  accent: "#C8102E" },
-  { name: "LEO Pratik Dhakal",       role: "Vice-President",           image: "/images/pratikdhakal.jpg",                          accent: "#1B3A6B" },
-  { name: "LEO Sailesh Koirala",     role: "Secretary",                image: "/images/Sailesh.jpg",                               accent: "#D4A017" },
-  { name: "LEO Prasis Adhikari",     role: "Joint Secretary",          image: "/images/prasis.jpg",                                accent: "#D4A017" },
-  { name: "LEO Rajani Sharma",       role: "Treasurer",                image: "/images/rajani-sharma.jpg",                         accent: "#C8102E" },
-  { name: "LEO Shreeya Acharya",     role: "Member",                   image: "/images/shreeya.jpg",                               accent: "#1B3A6B" },
-  { name: "LEO Shrijan Acharya",     role: "Member",                   image: "/images/shrijan.png",                               accent: "#2D5FAA" },
-  { name: "LEO Shristi Ranabhat",    role: "Member",                   image: "/images/shristi.jpeg",                              accent: "#D4A017" },
+  { name: "LEO Dayasagar Parajuli",   role: "Charter President",            image: "/images/dayasagarparajuli.jpg",        badge: "Founder",             accent: "#1B3A6B" },
+  { name: "LEO Sadhana Poudel",       role: "Immediate Past President",     image: "/images/sandhya.jpg",                  badge: "Leadership",          accent: "#2D5FAA" },
+  { name: "LEO Smriti Karki",         role: "Club Adviser",                 image: "/images/Smitri-Karki.jpg",             badge: "Guidance",            accent: "#C8102E" },
+  { name: "LEO Sailesh Koirala",      role: "President",                    image: "/images/Sailesh.jpg",                  badge: "Lead",                accent: "#1B3A6B" },
+  { name: "LEO Rajani Sharma",        role: "Secretary",                    image: "/images/rajani-sharma.jpg",                                          accent: "#C8102E" },
+  { name: "LEO Salina Koirala",       role: "Treasurer",                    image: "/images/salina.jpg" },
+  {  name:"LEO Pratik Dhakal",         role: "International Director",       image:"/images/pratikdhakal.jpg" },
 ];
 
+// No team entries currently have role "Member" so this will be empty until
+// new members are added. Kept here for when the roster grows.
 const leadership = TEAM.filter(m => m.role !== "Member");
 const members    = TEAM.filter(m => m.role === "Member");
 
 interface SectionHeadingProps {
-  eyebrow:  string;
-  title:    React.ReactNode;
+  eyebrow: string;
+  title: React.ReactNode;
   subtitle: string;
 }
 function SectionHeading({ eyebrow, title, subtitle }: SectionHeadingProps) {
@@ -87,38 +86,41 @@ export default function TeamPage() {
           ))}
         </div>
 
-        {/* ── Divider ── */}
-        <div className="divider-ornament mb-14">
-          <span className="chip chip-blue whitespace-nowrap">Active Members</span>
-        </div>
+        {/* ── Active Members — only rendered when there are members ── */}
+        {members.length > 0 && (
+          <>
+            {/* ── Divider ── */}
+            <div className="divider-ornament mb-14">
+              <span className="chip chip-blue whitespace-nowrap">Active Members</span>
+            </div>
 
-        {/* ── Active Members ── */}
-        <SectionHeading
-          eyebrow="Active Members"
-          title={
-            <>
-              Active{" "}
-              <span
-                style={{
-                  background: "linear-gradient(135deg,#1B3A6B,#4A7FD4)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Members
-              </span>
-            </>
-          }
-          subtitle="The heart of our club — committed volunteers making a real difference every day."
-        />
+            <SectionHeading
+              eyebrow="Active Members"
+              title={
+                <>
+                  Active{" "}
+                  <span
+                    style={{
+                      background: "linear-gradient(135deg,#1B3A6B,#4A7FD4)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    Members
+                  </span>
+                </>
+              }
+              subtitle="The heart of our club — committed volunteers making a real difference every day."
+            />
 
-        {/* md → 3 cols | sm → 2 cols | mobile → 1 col */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-20">
-          {members.map(m => (
-            <TeamMemberCard key={m.name} {...m} />
-          ))}
-        </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-20">
+              {members.map(m => (
+                <TeamMemberCard key={m.name} {...m} />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* ── Join CTA ── */}
         <div
@@ -134,8 +136,8 @@ export default function TeamPage() {
               className="chip mb-5"
               style={{
                 background: "rgba(135,206,235,0.15)",
-                border:     "1px solid rgba(135,206,235,0.30)",
-                color:      "#87CEEB",
+                border: "1px solid rgba(135,206,235,0.30)",
+                color: "#87CEEB",
               }}
             >
               Join Us
