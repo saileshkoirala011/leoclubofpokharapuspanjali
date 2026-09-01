@@ -31,6 +31,9 @@ const envSchema = z.object({
   SMTP_PASS: z.string().default(""),
   SMTP_FROM: z.string().default("noreply@example.com"),
 
+  // Email address that receives contact form notifications
+  ADMIN_CONTACT_EMAIL: z.string().email().optional(),
+
   BCRYPT_ROUNDS: z.coerce.number().default(12),
   MAX_LOGIN_ATTEMPTS: z.coerce.number().default(5),
   LOCKOUT_DURATION_MINUTES: z.coerce.number().default(15),

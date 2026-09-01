@@ -7,6 +7,7 @@ export interface IContact extends Document {
   subject:   string;
   message:   string;
   ip:        string | null;
+  status:    "unread" | "read" | "archived";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -19,6 +20,12 @@ const contactSchema = new Schema<IContact>(
     subject: { type: String, required: true, trim: true, maxlength: 200 },
     message: { type: String, required: true, trim: true, minlength: 5, maxlength: 5000 },
     ip:      { type: String, default: null },
+    status:  {
+      type:    String,
+      enum:    ["unread", "read", "archived"],
+      default: "unread",
+      index:   true,
+    },
   },
   { timestamps: true }
 );

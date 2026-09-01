@@ -157,6 +157,8 @@ export interface ApiOk<T> {
 
 export type ApiResult<T> = ApiOk<T>;
 
+import type { Contact } from "@/types";
+
 /** POST /contacts — public contact form submission */
 export async function submitContact(payload: {
   name:    string;
@@ -167,16 +169,24 @@ export async function submitContact(payload: {
   await api.post<ApiResult<null>>("/contacts", payload);
 }
 
-/** GET /contacts — admin only */
+/** GET /contacts — requires read:contacts permission */
 export async function fetchContacts(page = 1, limit = 15) {
   const { data } = await api.get<ApiResult<{
-    contacts:   unknown[];
+    contacts:   Contact[];
     pagination: { total: number; page: number; limit: number; pages: number };
   }>>(`/contacts?page=${page}&limit=${limit}`);
   return data.data;
 }
 
-/** DELETE /contacts/:id — admin only */
+/** PATCH /contacts/:id/status — requires read:contacts permission */
+export async function updateContactStatus(
+  id:     string,
+  status: "unread" | "read" | "archived",
+): Promise<void> {
+  await api.patch(`/contacts/${id}/status`, { status });
+}
+
+/** DELETE /contacts/:id — requires delete:contacts permission */
 export async function deleteContact(id: string): Promise<void> {
   await api.delete(`/contacts/${id}`);
 }

@@ -64,6 +64,7 @@ jobs:
           SMTP_USER:                   ""
           SMTP_PASS:                   ""
           SMTP_FROM:                   noreply@test.com
+          ADMIN_CONTACT_EMAIL:         admin@test.com
           BCRYPT_ROUNDS:               4
           MAX_LOGIN_ATTEMPTS:          5
           LOCKOUT_DURATION_MINUTES:    15
@@ -97,7 +98,7 @@ jobs:
           NEXT_PUBLIC_API_URL:  http://localhost:5000/api
           NEXT_PUBLIC_SITE_URL: http://localhost:3000
 
-  # ── E2E (Playwright) — only on main ─────────────────────────────────────────
+  # ── E2E (Playwright) — only on push to main ──────────────────────────────────
   e2e:
     name: E2E — Playwright smoke tests
     runs-on: ubuntu-latest
@@ -118,6 +119,7 @@ jobs:
 
       - run: npm ci
 
+      # Only install chromium — matches the projects array in playwright.config.ts
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
@@ -127,6 +129,8 @@ jobs:
           NEXT_PUBLIC_API_URL:  http://localhost:5000/api
           NEXT_PUBLIC_SITE_URL: http://localhost:3000
 
+      # Start the production server in the background.
+      # playwright.config.ts skips webServer in CI so there is no port conflict.
       - name: Start Next.js server
         run: npm run start &
         env:

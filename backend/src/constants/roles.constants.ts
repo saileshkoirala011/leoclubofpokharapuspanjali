@@ -18,15 +18,18 @@ export const ROLE_HIERARCHY: Record<Role, number> = {
 };
 
 export const PERMISSIONS = {
-  READ_PROFILE:   "read:profile",
-  UPDATE_PROFILE: "update:profile",
-  CHANGE_PASSWORD:"change:password",
-  READ_USERS:     "read:users",
-  UPDATE_USERS:   "update:users",
-  DELETE_USERS:   "delete:users",
-  ASSIGN_ROLES:   "assign:roles",
-  MANAGE_ADMINS:  "manage:admins",
-  SYSTEM_CONFIG:  "system:config",
+  READ_PROFILE:    "read:profile",
+  UPDATE_PROFILE:  "update:profile",
+  CHANGE_PASSWORD: "change:password",
+  READ_USERS:      "read:users",
+  UPDATE_USERS:    "update:users",
+  DELETE_USERS:    "delete:users",
+  ASSIGN_ROLES:    "assign:roles",
+  MANAGE_ADMINS:   "manage:admins",
+  SYSTEM_CONFIG:   "system:config",
+  // ── Contact permissions ──────────────────────────────────────────────────
+  READ_CONTACTS:   "read:contacts",
+  DELETE_CONTACTS: "delete:contacts",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -49,6 +52,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS.CHANGE_PASSWORD,
     PERMISSIONS.READ_USERS,
     PERMISSIONS.UPDATE_USERS,
+    PERMISSIONS.READ_CONTACTS,
   ],
   admin: [
     PERMISSIONS.READ_PROFILE,
@@ -58,6 +62,8 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS.UPDATE_USERS,
     PERMISSIONS.DELETE_USERS,
     PERMISSIONS.ASSIGN_ROLES,
+    PERMISSIONS.READ_CONTACTS,
+    PERMISSIONS.DELETE_CONTACTS,
   ],
   super_admin: Object.values(PERMISSIONS) as Permission[],
 };

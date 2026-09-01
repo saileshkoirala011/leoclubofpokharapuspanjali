@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Mail, FileText, BookMarked, LayoutGrid, RefreshCw, LogOut } from "lucide-react";
 import AdminGuard from "@/components/admin/AdminGuard";
 import { useAuth } from "@/context/AuthContext";
-import { fetchContacts, deleteContact } from "@/lib/api";
+import { fetchContacts, deleteContact, updateContactStatus } from "@/lib/api";
 import type { Contact, Pagination } from "@/types";
 
 const fmt = (d: string) =>
@@ -47,6 +47,15 @@ function Dashboard() {
       load(page);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to delete message.");
+    }
+  };
+
+  const handleStatusChange = async (id: string, status: "unread" | "read" | "archived") => {
+    try {
+      await updateContactStatus(id, status);
+      setContacts(prev => prev.map(c => c._id === id ? { ...c, status } : c));
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to update status.");
     }
   };
 
@@ -171,17 +180,43 @@ function Dashboard() {
                           </div>
                         </td>
                         <td className="px-5 py-4 hidden sm:table-cell">
-                          <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-[#EBF3FF] text-[#1B3A6B] max-w-[160px] truncate">
-                            {c.subject}
-                          </span>
+                          <div className="flex flex-col gap-1.5">
+                            <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-[#EBF3FF] text-[#1B3A6B] max-w-[160px] truncate">
+                              {c.subject}
+                            </span>
+                            {/* Status badge */}
+                            <span className={`inline-block text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full w-fit ${
+                              c.status === "unread"   ? "bg-[#FEF9EC] text-[#D4A017]" :
+                              c.status === "archived" ? "bg-[#F1F5F9] text-[#64748B]" :
+                                                        "bg-[#ECFDF5] text-[#2D9348]"
+                            }`}>
+                              {c.status ?? "unread"}
+                            </span>
+                          </div>
                         </td>
                         <td className="px-5 py-4 hidden lg:table-cell text-[#64748B] text-xs whitespace-nowrap">{fmt(c.createdAt)}</td>
                         <td className="px-5 py-4">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <button onClick={() => setExpanded(v => v === c._id ? null : c._id)}
                               className="text-xs font-semibold text-[#1B3A6B] hover:underline">
                               {expanded === c._id ? "Hide" : "View"}
                             </button>
+                            {(c.status === "unread") && (
+                              <button
+                                onClick={() => handleStatusChange(c._id, "read")}
+                                className="text-xs font-semibold text-green-600 hover:underline"
+                              >
+                                Mark read
+                              </button>
+                            )}
+                            {(c.status === "read") && (
+                              <button
+                                onClick={() => handleStatusChange(c._id, "archived")}
+                                className="text-xs font-semibold text-[#64748B] hover:underline"
+                              >
+                                Archive
+                              </button>
+                            )}
                             <button onClick={() => handleDelete(c._id)}
                               className="text-xs font-semibold text-red-400 hover:text-red-600">
                               Delete

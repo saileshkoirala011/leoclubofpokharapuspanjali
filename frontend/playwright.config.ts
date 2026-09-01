@@ -17,20 +17,28 @@ export default defineConfig({
 
   projects: [
     {
-      name:  "chromium",
-      use:   { ...devices["Desktop Chrome"] },
+      name: "chromium",
+      use:  { ...devices["Desktop Chrome"] },
     },
-    {
-      name:  "Mobile Chrome",
-      use:   { ...devices["Pixel 5"] },
-    },
+    // Mobile Chrome is only run locally — CI installs chromium only to keep
+    // the runner fast. Add it back once a full browser matrix is needed.
+    ...(process.env.CI ? [] : [
+      {
+        name: "Mobile Chrome",
+        use:  { ...devices["Pixel 5"] },
+      },
+    ]),
   ],
 
-  /* Start Next.js dev server automatically during local e2e runs */
-  webServer: {
-    command:           "npm run dev",
-    url:               "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout:           120_000,
-  },
+  /* webServer is used for local development only.
+   * In CI the server is started manually before `playwright test` runs,
+   * so we skip this block to avoid a port-conflict on 3000.           */
+  ...(process.env.CI ? {} : {
+    webServer: {
+      command:             "npm run dev",
+      url:                 "http://localhost:3000",
+      reuseExistingServer: true,
+      timeout:             120_000,
+    },
+  }),
 });
