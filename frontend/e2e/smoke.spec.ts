@@ -52,7 +52,8 @@ test.describe("Public pages", () => {
 
   test("404 page shows not-found content", async ({ page }) => {
     await page.goto("/page-that-does-not-exist");
-    await expect(page.getByRole("heading", { name: /Page Not Found/i })).toBeVisible();
+    // The h1 reads "Oops! We lost this page." — the chip label is "Page Not Found"
+    await expect(page.getByRole("heading", { name: /Oops! We lost this page\./i })).toBeVisible();
     await expect(page.getByRole("link", { name: /Back to Home/i })).toBeVisible();
   });
 
